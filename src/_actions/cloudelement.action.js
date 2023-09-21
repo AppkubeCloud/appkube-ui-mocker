@@ -111,7 +111,7 @@ function getAllCloudElement(data) {
             }
         }));
 
-        cloudElementServices.getCloudElement(data)
+        cloudElementServices.getAllCloudElement(data)
             .then(
                 response => {
                     if (response) {

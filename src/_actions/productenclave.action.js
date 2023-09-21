@@ -112,7 +112,7 @@ function getproductEnclaveSearch(data) {
             }
         }));
 
-        productEnclaveServices.getproductEnclave(data)
+        productEnclaveServices.getproductEnclaveSearch(data)
             .then(
                 response => {
                     if (response) {
