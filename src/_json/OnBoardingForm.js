@@ -510,6 +510,55 @@ const OnBoardingForm = {
         ]
       }
     ],
+    "config_summary": [
+      {
+        "order": 1,
+        "config_summary_title": "Config Summary Discovery",
+        "fields": [
+          {
+            "name": "organization",
+            "lable": "Organization",
+            "required": false,
+            "data_type": "String",
+            "option": [
+            ],
+            "html_element": "select"
+          },
+          {
+            "name": "department",
+            "lable": "Department",
+            "required": false,
+            "data_type": "String",
+            "option": [
+            ],
+            "html_element": "select"
+          },
+          {
+            "name": "landingzone",
+            "lable": "Landing Zone",
+            "required": false,
+            "data_type": "String",
+            "option": [
+            ],
+            "html_element": "select"
+          },
+          {
+            "name": "elementType",
+            "lable": "Element Type",
+            "required": false,
+            "data_type": "String",
+            "html_element": "textbox"
+          },
+          {
+            "name": "region",
+            "lable": "Region",
+            "required": false,
+            "data_type": "String",
+            "html_element": "textbox"
+          },
+        ]
+      }
+    ],
   }
 };
 

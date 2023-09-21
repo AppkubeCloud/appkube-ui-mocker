@@ -26,4 +26,5 @@ export const apiEndPoint = {
   SECURITY_ORGANIZARION_PUSH_CMDB:`${config.apiSyUrl}/organization/push-to-cmdb`,
   PRODUCT_ENCLAVE: `${config.apiUrl}/product-env`,
   CLOUD_ELEMENT: `${config.apiUrl}/cloud-element/search`,
+  CONFIG_SUMMERY_DISCOVERY:`${config.apiUrl}/cloud-element-summary`,
 }

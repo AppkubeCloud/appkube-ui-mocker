@@ -14,6 +14,7 @@ import Landingzone from '../Pages/SetupData/Landingzone';
 import User from '../Pages/Security/User';
 import ProductEnclave from '../Pages/SetupData/ProductEnclave';
 import CloudElement from '../Pages/SetupData/CloudElement';
+import ConfigSummaryDiscovery from '../Pages/SetupData/ConfigSummaryDiscovery';
 export const AppControler = ({ tabpage }) => {
     let tab_coponent = tabpage.name;
 
@@ -78,6 +79,10 @@ export const AppControler = ({ tabpage }) => {
             case "Cloud Element":
                 return (
                     <CloudElement />
+                );
+            case "Config Summary Discovery":
+                return (
+                    <ConfigSummaryDiscovery />
                 );
 
 

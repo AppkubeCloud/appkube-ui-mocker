@@ -12,3 +12,4 @@ export * from './securityorganization.services';
 export * from './user.services';
 export * from './productenclave.services';
 export * from './cloudelement.services';
+export * from './configsummarydiscovery.services';

@@ -14,6 +14,7 @@ const Landingzone= React.lazy(() => import('../Pages/SetupData/Landingzone'));
 const User= React.lazy(() => import('../Pages/Security/User'));
 const ProductEnclave= React.lazy(() => import('../Pages/SetupData/ProductEnclave'));
 const CloudElement= React.lazy(() => import('../Pages/SetupData/CloudElement'));
+const ConfigSummaryDiscovery= React.lazy(() => import('../Pages/SetupData/ConfigSummaryDiscovery'));
 const routes = [
     // { path: '/postlogin/data-setup', exact: true, name: 'Data Setup', component: DataSetup },
     { path: '/postlogin/data-tree', exact: true, name: 'Data Tree', component: DataTree },
@@ -30,6 +31,7 @@ const routes = [
     { path: '/postlogin/security-user', exact: true, name: 'User', component: User },
     { path: '/postlogin/product-enclave', exact: true, name: 'Product Enclave', component: ProductEnclave },
     { path: '/postlogin/cloud-element', exact: true, name: 'Cloud Element', component: CloudElement },
+    { path: '/postlogin/config-summary-discovery', exact: true, name: 'Config Summary Discovery', component: ConfigSummaryDiscovery },
 
 
 ]

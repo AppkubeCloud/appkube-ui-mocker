@@ -9,47 +9,43 @@ import "simplebar/dist/simplebar.min.css";
 import '../../assets/login.css';
 import Tooltip from "@material-ui/core/Tooltip";
 import '../../assets/newEmployee.css'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import OnBoardingFormData from '../../_json/OnBoardingForm';
 import { alert } from '../../_utilities';
 import { constantErr } from "../../Constant";
 import { Container } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
-import { businessElementAction, departmentAction, moduleAction, organizationAction, productAction, productEnvAction } from "../../_actions";
+import { departmentAction, organizationAction, landingzoneAction, productAction, configSummaryDiscoveryAction } from "../../_actions";
 import { connect } from "react-redux";
 import { status } from "../../_constants";
 import { DataGrid } from '@mui/x-data-grid';
 import '../../Table/table.css'
-class BusinessElement extends Component {
+
+
+class ConfigSummaryDiscovery extends Component {
     constructor(props) {
         super(props);
         this.state = {
             organization: "",
             department: "",
-            product: "",
-            productEnv: "",
+            landingzone: "",
+            region: "",
+            elementType: "",
             orgList: [],
-            productList: [],
-            productEnvList: [],
+            landingZoneList: [],
             isSubmitted: false,
-            businessElementCloumn: [
+            configSummaryDiscoveryCloumn: [
                 {
-                    field: 'departmentId', headerName: 'Department', width: 160,
+                    field: 'organizationName', headerName: 'Organization Name', flex: 1
                 },
                 {
-                    field: 'productName', headerName: 'Product', width: 160,
+                    field: 'departmentName', headerName: 'Department Name', flex: 1,
                 },
                 {
-                    field: 'productEnvName', headerName: 'Product Env', width: 160,
+                    field: 'landingZone', headerName: 'Landing Zone', flex: 1,
                 },
-                {
-                    field: 'moduleName', headerName: 'Module', width: 160,
-                },
-                {
-                    field: 'serviceName', headerName: 'Business Element', width: 160,
-                }
+
             ],
-            rowData: []
         };
     }
 
@@ -61,6 +57,15 @@ class BusinessElement extends Component {
 
     };
 
+    handleDepChange = (e) => {
+        const { name, value } = e.target;
+        this.setState({
+            [name]: value
+        });
+
+        this.props.dispatch(landingzoneAction.getLandingzone({ departmentId: value }))
+    };
+
     handleOrgChange = (e) => {
         const { name, value } = e.target;
         this.setState({
@@ -69,73 +74,40 @@ class BusinessElement extends Component {
         this.props.dispatch(departmentAction.getDepartment({ organizationId: value }))
     };
 
-    handleDepChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({
-            [name]: value
-        });
-
-        this.props.dispatch(productAction.getProduct({ departmentId: value }))
-    };
-
-    handleProductChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({
-            [name]: value
-        });
-        this.props.dispatch(productEnvAction.getProductEnv({ productId: value }))
-    }
-    hadleProductEnvChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({
-            [name]: value
-        });
-        this.props.dispatch(moduleAction.getModule({ productEnvId: value }))
-    }
 
 
-
-
-    validateBusinessElement = (isSubmitted) => {
+    validateProductEnclave = (isSubmitted) => {
         const validObj = {
             isValid: true,
             message: "",
         };
         let isValid = true;
         const retData = {
-            product: validObj,
-            productEnv: validObj,
-            module: validObj,
-            businessElement: validObj,
+            organization: validObj,
+            department: validObj,
+            landingzone: validObj,
             isValid,
         };
         if (isSubmitted) {
-            const { product, module, productEnv, businessElement } = this.state;
-            if (!product) {
-                retData.product = {
+            const { organization, department, landingzone } = this.state;
+            if (!organization) {
+                retData.organization = {
                     isValid: false,
-                    message: alert.error(constantErr.PRODUCT)
+                    message: alert.error(constantErr.ORGANIZATION)
                 };
                 isValid = false;
             }
-            if (!productEnv) {
-                retData.productEnv = {
+            if (!landingzone) {
+                retData.landingzone = {
                     isValid: false,
-                    message: alert.error(constantErr.PRODUCT_ENV)
+                    message: alert.error(constantErr.LANDING_ZONE)
                 };
                 isValid = false;
             }
-            if (!module) {
-                retData.module = {
+            if (!department) {
+                retData.department = {
                     isValid: false,
-                    message: alert.error(constantErr.MODULE)
-                };
-                isValid = false;
-            }
-            if (!businessElement) {
-                retData.businessElement = {
-                    isValid: false,
-                    message: alert.error(constantErr.BUSSINESS_ELEMENT)
+                    message: alert.error(constantErr.DEPARTMENT)
                 };
                 isValid = false;
             }
@@ -145,25 +117,20 @@ class BusinessElement extends Component {
     };
 
 
-
-    handleBusinessElement = async (event) => {
-        const { productEnv, product, module, department, businessElement } = this.state;
+    getConfigSummary = async (event) => {
+        const { region, elementType, landingzone } = this.state;
         event.preventDefault();
         this.setState({
             isSubmitted: true
         });
-        const newErrorData = this.validateBusinessElement(true);
+        const newErrorData = this.validateProductEnclave(true);
         if (newErrorData.isValid) {
-            var newBusinessElement = {
-                "departmentId": department,
-                "productId": product,
-                "productEnvId": productEnv,
-                "moduleId": module,
-                "serviceName": businessElement,
-                "serviceNature": "",
-                "serviceType": ""
+            var newPenv = {
+                "landingZone": landingzone,
+                "elementType": "vpc",
+                "awsRegion": region
             };
-            this.props.dispatch(businessElementAction.addBusinessElement(newBusinessElement));
+            this.props.dispatch(configSummaryDiscoveryAction.getConfigSummaryDiscovery({ newPenv }))
         }
     }
 
@@ -187,51 +154,34 @@ class BusinessElement extends Component {
                 })
             }
         }
-        if (this.props.product_status !== prevProps.product_status && this.props.product_status == status.SUCCESS) {
-            if (this.props.product_list && this.props.product_list.length > 0) {
+        if (this.props.landingzone_status !== prevProps.landingzone_status && this.props.landingzone_status == status.SUCCESS) {
+            if (this.props.landingzone_list && this.props.landingzone_list.length > 0) {
                 this.setState({
-                    productList: this.props.product_list
+                    landingZoneList: this.props.landingzone_list
                 })
             }
         }
-        if (this.props.product_env_status !== prevProps.product_env_status && this.props.product_env_status == status.SUCCESS) {
-            if (this.props.product_env_list && this.props.product_env_list.length > 0) {
+        if (this.props.config_summary_discovery_status !== prevProps.config_summary_discovery_status && this.props.config_summary_discovery_status == status.SUCCESS) {
+            if (this.props.config_summary_discovery_list && this.props.config_summary_discovery_list.length > 0) {
                 this.setState({
-                    productEnvList: this.props.product_env_list
-                })
-            }
-        }
-        if (this.props.module_status !== prevProps.module_status && this.props.module_status == status.SUCCESS) {
-            if (this.props.module_list && this.props.module_list.length > 0) {
-                this.setState({
-                    moduleList: this.props.module_list
-                })
-            }
-        }
-        if (this.props.business_element_status !== prevProps.business_element_status && this.props.business_element_status == status.SUCCESS) {
-            if (this.props.business_element_list && this.props.business_element_list.length > 0) {
-                this.setState({
-                    businessElementList: this.props.business_element_list
+                    configSummaryList: this.props.config_summary_discovery_list
                 })
             }
         }
     }
 
-    refreshBuniessElement = () => {
-        this.props.dispatch(businessElementAction.getBusinessElement({}))
+    refreshConfigSummary = () => {
+        this.props.dispatch(configSummaryDiscoveryAction.getAllConfigSummaryDiscovery({}))
     }
-
 
 
     render() {
-        const { orgList, businessElementCloumn } = this.state;
-
-
+        const { orgList, configSummaryDiscoveryCloumn } = this.state;
         return (
             <>
                 <div className='form-container'>
                     {
-                        OnBoardingFormData.form.business_element.map(businessElementDeatils => {
+                        OnBoardingFormData.form.config_summary.map(configSummaryDeatils => {
                             return (
                                 <>
                                     <div className="main-content">
@@ -241,7 +191,7 @@ class BusinessElement extends Component {
                                                     <div className="general-contect">
                                                         <div className="d-flex heading">
                                                             <h5 className="d-inline-block">
-                                                                {businessElementDeatils.business_element_title}
+                                                                {configSummaryDeatils.config_summary_title}
                                                             </h5>
                                                         </div>
                                                         <div className="general-information">
@@ -250,89 +200,68 @@ class BusinessElement extends Component {
                                                                     <div className="user-content">
                                                                         <div className="row">
                                                                             {
-                                                                                businessElementDeatils.fields.map(fieldsData => {
+                                                                                configSummaryDeatils.fields.map(fieldsData => {
                                                                                     return (
                                                                                         <div className="col-md-4">
                                                                                             <div className="form-group form-group-common">
                                                                                                 {
-                                                                                                    fieldsData.html_element === "textbox" ?
+                                                                                                    fieldsData.html_element === "textbox" && fieldsData.name === "elementType" ?
                                                                                                         <>
                                                                                                             <label className="d-block">{fieldsData.lable}</label>
-                                                                                                            <input type={fieldsData.html_element} name={fieldsData.name} required={fieldsData.required} datatype={fieldsData.data_type} onChange={this.handleStateChange}
+                                                                                                            <input type={fieldsData.html_element} name={fieldsData.name} value={"vpc"} disabled required={fieldsData.required} datatype={fieldsData.data_type} onChange={this.handleStateChange}
                                                                                                                 placeholder="" className="form-control" />
                                                                                                         </>
-                                                                                                        : fieldsData.html_element === "email" ?
+                                                                                                        : fieldsData.html_element === "textbox" ?
                                                                                                             <>
                                                                                                                 <label className="d-block">{fieldsData.lable}</label>
                                                                                                                 <input type={fieldsData.html_element} name={fieldsData.name} required={fieldsData.required} datatype={fieldsData.data_type} onChange={this.handleStateChange}
                                                                                                                     placeholder="" className="form-control" />
-                                                                                                            </> : fieldsData.html_element === "select" && fieldsData.name === "organization" ?
+                                                                                                            </>
+                                                                                                            : fieldsData.html_element === "email" ?
                                                                                                                 <>
                                                                                                                     <label className="d-block">{fieldsData.lable}</label>
-                                                                                                                    <FormControl className="select">
-                                                                                                                        <NativeSelect name={fieldsData.name} onChange={this.handleOrgChange} >
-                                                                                                                            <option value="">-Select-</option>
-                                                                                                                            {orgList && orgList.map((optionData) => (
-                                                                                                                                <option key={optionData.id} value={optionData.id}>
-                                                                                                                                    {optionData.name}
-                                                                                                                                </option>
-                                                                                                                            ))}
-                                                                                                                        </NativeSelect>
-                                                                                                                    </FormControl>
-                                                                                                                </> : fieldsData.html_element === "select" && fieldsData.name === "department" ?
+                                                                                                                    <input type={fieldsData.html_element} name={fieldsData.name} required={fieldsData.required} datatype={fieldsData.data_type} onChange={this.handleStateChange}
+                                                                                                                        placeholder="" className="form-control" />
+                                                                                                                </> : fieldsData.html_element === "select" && fieldsData.name === "organization" ?
                                                                                                                     <>
                                                                                                                         <label className="d-block">{fieldsData.lable}</label>
                                                                                                                         <FormControl className="select">
-                                                                                                                            <NativeSelect name={fieldsData.name} onChange={this.handleDepChange} >
+                                                                                                                            <NativeSelect name={fieldsData.name} onChange={this.handleOrgChange} >
                                                                                                                                 <option value="">-Select-</option>
-                                                                                                                                {this.props.department_list && this.props.department_list.map((optionData) => (
+                                                                                                                                {orgList && orgList.map((optionData) => (
                                                                                                                                     <option key={optionData.id} value={optionData.id}>
                                                                                                                                         {optionData.name}
                                                                                                                                     </option>
                                                                                                                                 ))}
                                                                                                                             </NativeSelect>
                                                                                                                         </FormControl>
-                                                                                                                    </> :
-                                                                                                                    fieldsData.html_element === "select" && fieldsData.name === "product" ?
+                                                                                                                    </> : fieldsData.html_element === "select" && fieldsData.name === "department" ?
                                                                                                                         <>
                                                                                                                             <label className="d-block">{fieldsData.lable}</label>
                                                                                                                             <FormControl className="select">
-                                                                                                                                <NativeSelect name={fieldsData.name} onChange={this.handleProductChange} >
+                                                                                                                                <NativeSelect name={fieldsData.name} onChange={this.handleDepChange} >
                                                                                                                                     <option value="">-Select-</option>
-                                                                                                                                    {this.props.product_list && this.props.product_list.map((optionData) => (
+                                                                                                                                    {this.props.department_list && this.props.department_list.map((optionData) => (
                                                                                                                                         <option key={optionData.id} value={optionData.id}>
                                                                                                                                             {optionData.name}
                                                                                                                                         </option>
                                                                                                                                     ))}
                                                                                                                                 </NativeSelect>
                                                                                                                             </FormControl>
-                                                                                                                        </> : fieldsData.html_element === "select" && fieldsData.name === "productEnv" ?
+                                                                                                                        </> : fieldsData.html_element === "select" && fieldsData.name === "landingzone" ?
                                                                                                                             <>
                                                                                                                                 <label className="d-block">{fieldsData.lable}</label>
                                                                                                                                 <FormControl className="select">
-                                                                                                                                    <NativeSelect name={fieldsData.name} onChange={this.hadleProductEnvChange} >
+                                                                                                                                    <NativeSelect name={fieldsData.name} onChange={this.handleStateChange} >
                                                                                                                                         <option value="">-Select-</option>
-                                                                                                                                        {this.props.product_env_list && this.props.product_env_list.map((optionData) => (
-                                                                                                                                            <option key={optionData.id} value={optionData.id}>
-                                                                                                                                                {optionData.name}
+                                                                                                                                        {this.props.landingzone_list && this.props.landingzone_list.map((optionData) => (
+                                                                                                                                            <option key={optionData.landingZone} value={optionData.landingZone}>
+                                                                                                                                                {optionData.landingZone}
                                                                                                                                             </option>
                                                                                                                                         ))}
                                                                                                                                     </NativeSelect>
                                                                                                                                 </FormControl>
-                                                                                                                            </> : fieldsData.html_element === "select" && fieldsData.name === "module" ?
-                                                                                                                                <>
-                                                                                                                                    <label className="d-block">{fieldsData.lable}</label>
-                                                                                                                                    <FormControl className="select">
-                                                                                                                                        <NativeSelect name={fieldsData.name} onChange={this.handleStateChange} >
-                                                                                                                                            <option value="">-Select-</option>
-                                                                                                                                            {this.props.module_list && this.props.module_list.map((optionData) => (
-                                                                                                                                                <option key={optionData.id} value={optionData.id}>
-                                                                                                                                                    {optionData.name}
-                                                                                                                                                </option>
-                                                                                                                                            ))}
-                                                                                                                                        </NativeSelect>
-                                                                                                                                    </FormControl>
-                                                                                                                                </> : ''
+                                                                                                                            </> : ''
                                                                                                 }
                                                                                             </div>
                                                                                         </div>
@@ -344,7 +273,7 @@ class BusinessElement extends Component {
                                                                 </div>
                                                                 <Container className="mt-4" >
                                                                     <Tooltip title="Save">
-                                                                        <Button type="submit" className="ml-0" variant="contained" color="primary" onClick={this.handleBusinessElement}>
+                                                                        <Button type="submit" className="ml-0" variant="contained" color="primary" onClick={this.getConfigSummary}>
                                                                             <SaveAsIcon className="mr-2" /> Save
                                                                         </Button>
                                                                     </Tooltip>
@@ -363,15 +292,15 @@ class BusinessElement extends Component {
                     <div className="main-content">
                         <div className="vendor-content">
                             <div className="d-flex">
-                                <h4>Business Element Table</h4>
-                                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.refreshBuniessElement}>
+                                <h4>Config Summary Discovery Table</h4>
+                                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.refreshConfigSummary}>
                                     <i className="fa fa-refresh"></i>
                                 </Button>
                             </div>
                             <div className="mt-3" style={{ height: 400, width: '100%' }}>
                                 <DataGrid
-                                    rows={this.props.business_element_list != null && this.props.business_element_list}
-                                    columns={businessElementCloumn}
+                                    rows={this.props.config_summary_discovery_list != null && this.props.config_summary_discovery_list}
+                                    columns={configSummaryDiscoveryCloumn}
                                     initialState={{
                                         pagination: {
                                             paginationModel: { page: 0, pageSize: 5 },
@@ -388,23 +317,22 @@ class BusinessElement extends Component {
     }
 }
 function mapStateToProps(state) {
-    const { organization_status, organization_list, department_status, department_list, product_status, product_list, product_env_status, product_env_list, module_list, business_element_status, module_status, business_element_list } = state.hr;
+    const { organization_status, organization_list, department_status, department_list, landingzone_status, landingzone_list, config_summary_discovery_list, config_summary_discovery_status } = state.hr;
     return {
         organization_status,
         organization_list,
         department_status,
         department_list,
-        product_status,
-        product_list,
-        product_env_status,
-        product_env_list,
-        module_list,
-        module_status,
-        business_element_list,
-        business_element_status
+        landingzone_status,
+        landingzone_list,
+        config_summary_discovery_list,
+        config_summary_discovery_status
     };
 }
 
-const connectedBusinessElement = connect(mapStateToProps)(BusinessElement);
-export default connectedBusinessElement;
+const connectedConfigSummaryDiscovery = connect(mapStateToProps)(ConfigSummaryDiscovery);
+export default connectedConfigSummaryDiscovery;
+
+
+
 

@@ -93,6 +93,13 @@ const _nav = [
                 activeArr: ['/postlogin/cloud-element'],
                 open: false,
             },
+            {
+                _tag: 'SidebarNavItem',
+                name: 'Config Summary Discovery',
+                to: '/postlogin/config-summary-discovery',
+                activeArr: ['/postlogin/config-summary-discovery'],
+                open: false,
+            },
         ]
     },
     {

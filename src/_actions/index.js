@@ -13,3 +13,4 @@ export * from './landingzone.action';
 export * from './user.action';
 export * from './productenclave.action';
 export * from './cloudelement.action';
+export * from './configsummarydiscovery.action';
