@@ -14,5 +14,9 @@ export const constantErr = {
     USER_NAME: "Name is required",
     USER_EMAIL: "Email is required",
     USER_PASSWORD: "Password is required",
+    CLOUD:"Cloud name is required",
+    DISPLAY_NAME:"Display name is required",
+    ROLE_ARN:"Role arn is required",
+    EXERNALID:"External id is required",
     BEARER_TOKEN:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJST0xFX0FOT05ZTU9VUyIsImF1dGgiOiJST0xFX0FOT05ZTU9VUyJ9.g_UGI84oTJAsde4-1Ye7-oDzb1Xkk3W6I3_b-rwvTlDxRrFhgjTPuBF7PSuBlUY9n6PmR7y5EcLnnn0JXNCuDA"
 }

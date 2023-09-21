@@ -77,11 +77,16 @@ class Landingzone extends Component {
         const retData = {
             organization: validObj,
             department: validObj,
+            cloud: validObj,
+            displayName: validObj,
+            roleArn: validObj,
+            externalId: validObj,
             landingzone: validObj,
+
             isValid,
         };
         if (isSubmitted) {
-            const { organization, department, landingzone } = this.state;
+            const { organization, department, landingzone,cloud ,displayName,roleArn,externalId} = this.state;
             if (!organization) {
                 retData.organization = {
                     isValid: false,
@@ -89,17 +94,46 @@ class Landingzone extends Component {
                 };
                 isValid = false;
             }
-            if (!landingzone) {
-                retData.landingzone = {
-                    isValid: false,
-                    message: alert.error(constantErr.LANDING_ZONE)
-                };
-                isValid = false;
-            }
             if (!department) {
                 retData.department = {
                     isValid: false,
                     message: alert.error(constantErr.DEPARTMENT)
+                };
+                isValid = false;
+            }
+            if (!cloud) {
+                retData.cloud = {
+                    isValid: false,
+                    message: alert.error(constantErr.CLOUD)
+                };
+                isValid = false;
+            }
+            if (!displayName) {
+                retData.displayName = {
+                    isValid: false,
+                    message: alert.error(constantErr.DISPLAY_NAME)
+                };
+                isValid = false;
+            }
+            if (!roleArn) {
+                retData.roleArn = {
+                    isValid: false,
+                    message: alert.error(constantErr.ROLE_ARN)
+                };
+                isValid = false;
+            }
+            if (!externalId) {
+                retData.externalId = {
+                    isValid: false,
+                    message: alert.error(constantErr.EXERNALID)
+                };
+                isValid = false;
+            }
+
+            if (!landingzone) {
+                retData.landingzone = {
+                    isValid: false,
+                    message: alert.error(constantErr.LANDING_ZONE)
                 };
                 isValid = false;
             }
@@ -120,7 +154,7 @@ class Landingzone extends Component {
             var newLandingzone = {
                 "name": landingzone,
                 "departmentId": department,
-                "cloud": "aws",
+                "cloud": cloud,
                 "displayName": displayName,
                 "roleArn": roleArn,
                 "externalId": externalId,
