@@ -7,7 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import navigation from './_nav';
 import { Link } from "react-router-dom";
-import Logo from '../assets/images/logo.png';
+
 import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import SimpleBar from 'simplebar-react';
@@ -16,7 +16,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { connect } from "react-redux";
 import { tabAction } from '../_actions';
-
+import Logo from '../assets/images/logo.png';
 class SideMenu extends Component {
   constructor(props) {
     super(props)
@@ -187,8 +187,7 @@ class SideMenu extends Component {
             <div className="row">
               <div className="col-10">
                 <div className="logo">
-                  GSCS HR
-                  {/* <a href="/"><img src={Logo} alt="" style={{ width: "260px" }} /></a> */}
+                  <a href="/"><img src={Logo} alt="" style={{ width: "260px" }} /></a> 
                 </div>
               </div>
               <div className="col-2">

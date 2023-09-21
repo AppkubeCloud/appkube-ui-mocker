@@ -8,6 +8,7 @@ export const apiEndPoint = {
   PRODUCT_SEARCH: `${config.apiUrl}/product/search`,
   PRODUCT_ENV: `${config.apiUrl}/product-env`,
   PRODUCT_ENV_SEARCH: `${config.apiUrl}/infra-discovery/aws`,
+  PRODUCT_ENV_GET:`${config.apiUrl}/product-enclave`,
   MODULE: `${config.apiUrl}/module`,
   MODULE_SEARCH: `${config.apiUrl}/module/search`,
   BUSINSS_ELEMENT: `${config.apiUrl}/business-element`,
@@ -24,4 +25,5 @@ export const apiEndPoint = {
   USER_SEARCH: `${config.apiSyUrl}/users/search`,
   SECURITY_ORGANIZARION_PUSH_CMDB:`${config.apiSyUrl}/organization/push-to-cmdb`,
   PRODUCT_ENCLAVE: `${config.apiUrl}/product-env`,
+  CLOUD_ELEMENT: `${config.apiUrl}/cloud-element/search`,
 }

@@ -33,17 +33,12 @@ class Product extends Component {
             productList: [],
             isSubmitted: false,
             productCloumn: [
+              
                 {
-                    field: 'organizationId', headerName: 'Organization', flex: 1,
+                    field: 'organizationName', headerName: 'Organization Name', flex: 1
                 },
                 {
-                    field: 'organizationName', headerName: 'organization Name', flex: 1
-                },
-                {
-                    field: 'departmentId', headerName: 'Department Id', flex: 1,
-                },
-                {
-                    field: 'departmentName', headerName: 'department Name', flex: 1,
+                    field: 'departmentName', headerName: 'Department Name', flex: 1,
                 },
                 {
                     field: 'name', headerName: 'Product', flex: 1,

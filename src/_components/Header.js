@@ -187,7 +187,7 @@ class Header extends Component {
           <div className="header">
             <div className="row justify-content-center align-items-center">
               <div className="col-4">
-                <span className='company-name-top'>GSCS HR</span>
+                <span className='company-name-top'>Appkube Ui</span>
               </div>
               <div className="col-xl-8 col-lg-12">
                 <div className="d-flex text-right header-notification ">

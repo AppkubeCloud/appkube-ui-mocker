@@ -36,24 +36,14 @@ class CloudElement extends Component {
       isSubmitted: false,
       cloudElementCloumn: [
         {
-          field: 'organizationId', headerName: 'Organization', flex: 1,
-        },
-        {
-          field: 'organizationName', headerName: 'organization Name', flex: 1
-        },
-        {
-          field: 'departmentId', headerName: 'Department Id', flex: 1,
+          field: 'organizationName', headerName: 'Organization Name', flex: 1
         },
         {
           field: 'departmentName', headerName: 'Department Name', flex: 1,
         },
         {
-          field: 'landingZoneId', headerName: 'Landing Zone Id', flex: 1,
-        },
-        {
           field: 'landingZone', headerName: 'Landing Zone', flex: 1,
         },
-
         {
           field: 'elementType', headerName: 'Element Type', flex: 1,
         },
@@ -188,8 +178,8 @@ class CloudElement extends Component {
     }
   }
 
-  refreshlandingZone = () => {
-    // this.props.dispatch(landingzoneAction.getLandingzone({}))
+  refreshCloud = () => {
+    this.props.dispatch(cloudElementAction.getAllCloudElement({  }))
   }
 
 
@@ -305,6 +295,9 @@ class CloudElement extends Component {
             <div className="vendor-content">
               <div className="d-flex">
                 <h4>Cloud Element Table</h4>
+                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.refreshCloud}>
+                  <i className="fa fa-refresh"></i>
+                </Button>
               </div>
               <div className="mt-3" style={{ height: 400, width: '100%' }}>
                 <DataGrid

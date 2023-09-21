@@ -3,7 +3,8 @@ import { apiEndPoint } from "./apiEndPoint";
 
 export const productEnclaveServices = {
   addproductEnclave,
-  getproductEnclave
+  getproductEnclave,
+  getproductEnclaveSearch
 }
 
 function addproductEnclave(data) {
@@ -40,4 +41,13 @@ function getproductEnclave(data) {
   const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
   return fetch(`${apiEndPoint.PRODUCT_ENV_SEARCH}${url}`, requestOptions).then(response => response.json());
 }
+function getproductEnclaveSearch() {
+  const extraHeaders = {
+    "Content-Type": "application/json"
+  };
+  const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
+  return fetch(`${apiEndPoint.PRODUCT_ENV_GET}`, requestOptions).then(response => response.json());
+}
+
+
 

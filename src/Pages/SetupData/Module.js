@@ -34,19 +34,10 @@ class DataSetup extends Component {
             isSubmitted: false,
             moduleCloumn: [
                 {
-                    field: 'organizationId', headerName: 'Organization', flex: 1,
-                },
-                {
-                    field: 'organizationName', headerName: 'organization Name', flex: 1
-                },
-                {
-                    field: 'departmentId', headerName: 'Department Id', flex: 1,
+                    field: 'organizationName', headerName: 'Organization Name', flex: 1
                 },
                 {
                     field: 'departmentName', headerName: 'Department Name', flex: 1,
-                },
-                {
-                    field: 'productId', headerName: 'Product Id', flex: 1,
                 },
                 {
                     field: 'productName', headerName: 'Product Name', flex: 1,

@@ -4,7 +4,8 @@ import { alert, commonFunctions } from '../_utilities';
 
 export const productEnclaveAction = {
     addproductEnclave,
-    getproductEnclave
+    getproductEnclave,
+    getproductEnclaveSearch
 };
 
 function addproductEnclave(data) {
@@ -55,6 +56,53 @@ function addproductEnclave(data) {
 
 
 function getproductEnclave(data) {
+    return dispatch => {
+        dispatch(dispatchFunction({
+            type: status.IN_PROGRESS,
+            data: {
+                product_enclave_status: status.IN_PROGRESS,
+                product_enclave_list: null
+            }
+        }));
+
+        productEnclaveServices.getproductEnclave(data)
+            .then(
+                response => {
+                    if (response) {
+                        dispatch(dispatchFunction({
+                            type: status.SUCCESS,
+                            data: {
+                               product_enclave_status: status.SUCCESS,
+                               product_enclave_list: response
+                            }
+                        }));
+                    } else {
+                        dispatch(dispatchFunction({
+                            type: status.FAILURE,
+                            data: {
+                               product_enclave_status: status.FAILURE,
+                               product_enclave_list: response
+                            }
+                        }));
+                        alert.error(response);
+                    }
+                },
+                error => {
+                    dispatch(dispatchFunction({
+                        type: status.FAILURE,
+                        data: {
+                           product_enclave_status: status.FAILURE,
+                           product_enclave_list: error
+                        }
+                    }));
+                    alert.error(error);
+                }
+            );
+    };
+}
+
+
+function getproductEnclaveSearch(data) {
     return dispatch => {
         dispatch(dispatchFunction({
             type: status.IN_PROGRESS,

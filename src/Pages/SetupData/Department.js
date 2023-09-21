@@ -40,10 +40,7 @@ class Department extends Component {
             isSubmitted: false,
             depCloumn: [
                 {
-                    field: 'organizationId', headerName: 'Organization', flex: 1
-                },
-                {
-                    field: 'organizationName', headerName: 'organization Name', flex: 1
+                    field: 'organizationName', headerName: 'Organization Name', flex: 1
                 },
                 {
                     field: 'name', headerName: 'Department', flex: 1

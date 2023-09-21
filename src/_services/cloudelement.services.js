@@ -3,7 +3,8 @@ import { apiEndPoint } from "./apiEndPoint";
 
 export const cloudElementServices = {
   addCloudElement,
-  getCloudElement
+  getCloudElement,
+  getAllCloudElement
 }
 
 function addCloudElement(data) {
@@ -39,5 +40,14 @@ function getCloudElement(data) {
   }
   const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
   return fetch(`${apiEndPoint.PRODUCT_ENV_SEARCH}${url}`, requestOptions).then(response => response.json());
+}
+
+
+function getAllCloudElement() {
+  const extraHeaders = {
+    "Content-Type": "application/json"
+  };
+  const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
+  return fetch(`${apiEndPoint.CLOUD_ELEMENT}`, requestOptions).then(response => response.json());
 }
 
