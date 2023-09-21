@@ -127,7 +127,7 @@ class ConfigSummaryDiscovery extends Component {
         if (newErrorData.isValid) {
             var newPenv = {
                 "landingZone": landingzone,
-                "elementType": "vpc",
+                "elementType": "APP_CONFIG_SUMMARY",
                 "awsRegion": region
             };
             this.props.dispatch(configSummaryDiscoveryAction.getConfigSummaryDiscovery({ newPenv }))
@@ -208,7 +208,7 @@ class ConfigSummaryDiscovery extends Component {
                                                                                                     fieldsData.html_element === "textbox" && fieldsData.name === "elementType" ?
                                                                                                         <>
                                                                                                             <label className="d-block">{fieldsData.lable}</label>
-                                                                                                            <input type={fieldsData.html_element} name={fieldsData.name} value={"vpc"} disabled required={fieldsData.required} datatype={fieldsData.data_type} onChange={this.handleStateChange}
+                                                                                                            <input type={fieldsData.html_element} name={fieldsData.name} value={"APP_CONFIG_SUMMARY"} disabled required={fieldsData.required} datatype={fieldsData.data_type} onChange={this.handleStateChange}
                                                                                                                 placeholder="" className="form-control" />
                                                                                                         </>
                                                                                                         : fieldsData.html_element === "textbox" ?
