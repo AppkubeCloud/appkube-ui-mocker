@@ -22,27 +22,29 @@ function getCloudElement(data) {
   };
   let url = "";
   if (data.newPenv) {
-    if (data.newPenv.organizationId) {
-      url += `${url ? '&' : '?'}organizationId=${data.newPenv.organizationId}`;
+    for (let i = 0; i < data.newPenv.elementType.length; i++) {
+      if (data.newPenv.organizationId) {
+        url += `${url ? '&' : '?'}organizationId=${data.newPenv.organizationId}`;
+      }
+      if (data.newPenv.departmentId) {
+        url += `${url ? '&' : '?'}departmentId=${data.newPenv.departmentId}`;
+      }
+      if (data.newPenv.landingZone) {
+        url += `${url ? '&' : '?'}landingZone=${data.newPenv.landingZone}`;
+      }
+      if (data.newPenv.elementType) {
+        url += `${url ? '&' : '?'}elementType=${data.newPenv.elementType[i]}`;
+      }
+      if (data.newPenv.awsRegion) {
+        url += `${url ? '&' : '?'}awsRegion=${data.newPenv.awsRegion}`;
+      }
+      console.log("personName", data)
+      const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
+      fetch(`${apiEndPoint.INFRA_DISCOVERY_API}${url}`, requestOptions).then(response => response.json());
     }
-    if (data.newPenv.departmentId) {
-      url += `${url ? '&' : '?'}departmentId=${data.newPenv.departmentId}`;
-    }
-    if (data.newPenv.landingZone) {
-      url += `${url ? '&' : '?'}landingZone=${data.newPenv.landingZone}`;
-    }
-    if (data.newPenv.elementType) {
-      // for (let i = 0; i < data.newPenv.elementType.length; i++) {
-        url += `${url ? '&' : '?'}elementType=${data.newPenv.elementType}`;
-      // }
-    }
-    if (data.newPenv.awsRegion) {
-      url += `${url ? '&' : '?'}awsRegion=${data.newPenv.awsRegion}`;
-    }
+    
   }
-  console.log("personName", data)
-  const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
-  return fetch(`${apiEndPoint.PRODUCT_ENV_SEARCH}${url}`, requestOptions).then(response => response.json());
+  
 }
 
 

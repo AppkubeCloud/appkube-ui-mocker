@@ -7,7 +7,7 @@ export const apiEndPoint = {
   PRODUCT: `${config.apiUrl}/product`,
   PRODUCT_SEARCH: `${config.apiUrl}/product/search`,
   PRODUCT_ENV: `${config.apiUrl}/product-env`,
-  PRODUCT_ENV_SEARCH: `${config.apiUrl}/infra-discovery/aws`,
+  INFRA_DISCOVERY_API: `${config.apiUrl}/infra-discovery/organization/1/aws`,
   PRODUCT_ENV_GET:`${config.apiUrl}/product-enclave`,
   MODULE: `${config.apiUrl}/module`,
   MODULE_SEARCH: `${config.apiUrl}/module/search`,

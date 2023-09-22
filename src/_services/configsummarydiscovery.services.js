@@ -39,7 +39,7 @@ function getConfigSummaryDiscovery(data) {
     }
   }
   const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
-  return fetch(`${apiEndPoint.PRODUCT_ENV_SEARCH}${url}`, requestOptions).then(response => response.json());
+  return fetch(`${apiEndPoint.INFRA_DISCOVERY_API}${url}`, requestOptions).then(response => response.json());
 }
 function getAllConfigSummaryDiscovery() {
   const extraHeaders = {
