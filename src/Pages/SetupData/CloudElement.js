@@ -348,9 +348,9 @@ class CloudElement extends Component {
                                           )
                                         })
                                       }
-                                      <FormControl sx={{ m: 1, width: 300,height:50}}>
-                                        <InputLabel id="demo-multiple-checkbox-label">Element Type</InputLabel>
-                                        <Select
+                                      <FormControl className="select" >
+                                      <label className="d-block">Cloud Element</label>
+                                        <Select style={{height:"50px"}}
                                           labelId="demo-multiple-checkbox-label"
                                           id="demo-multiple-checkbox"
                                           multiple

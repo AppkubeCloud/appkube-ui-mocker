@@ -47,12 +47,12 @@ function getCloudElement(data) {
   const extraHeaders = {
     "Content-Type": "application/json"
   };
-  let url = ""
+  const promises = []; 
+
   if (data.newPenv) {
     if (data.newPenv.elementType && data.newPenv.elementType.length > 0) {
       data.newPenv.elementType.forEach(elementType => {
         const queryParams = [];
-
         if (data.newPenv.organizationId) {
           queryParams.push(`organizationId=${data.newPenv.organizationId}`);
         }
@@ -66,18 +66,26 @@ function getCloudElement(data) {
         if (data.newPenv.awsRegion) {
           queryParams.push(`awsRegion=${data.newPenv.awsRegion}`);
         }
-
         const queryString = queryParams.join('&');
-        // console.log("queryString",queryString)
-        // const url = `/infra-discovery/organization/1/aws?${queryString}`;
-        // console.log("queryParams", url);
         const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
-        fetch(`${apiEndPoint.INFRA_DISCOVERY_API + "?"}${queryString}`, requestOptions).then(response => response.json());
+        let uniqueIdCounter = 0;
+        function generateUniqueId() {
+          return `row-${uniqueIdCounter++}`;
+        }
+        promises.push(
+          fetch(`${apiEndPoint.INFRA_DISCOVERY_API + "?"}${queryString}`, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+              data.id = generateUniqueId();
+              return data;
+            })
+        );
       });
     }
   }
-
+  return Promise.all(promises);
 }
+
 
 
 function getAllCloudElement() {

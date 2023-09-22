@@ -493,13 +493,13 @@ const OnBoardingForm = {
             ],
             "html_element": "select"
           },
-          {
-            "name": "elementType",
-            "lable": "Element Type",
-            "required": false,
-            "data_type": "String",
-            "html_element": "textbox"
-          },
+          // {
+          //   "name": "elementType",
+          //   "lable": "Element Type",
+          //   "required": false,
+          //   "data_type": "String",
+          //   "html_element": "textbox"
+          // },
           {
             "name": "region",
             "lable": "Region",
