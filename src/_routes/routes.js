@@ -31,7 +31,7 @@ const routes = [
     { path: '/postlogin/security-user', exact: true, name: 'User', component: User },
     { path: '/postlogin/product-enclave', exact: true, name: 'Product Enclave', component: ProductEnclave },
     { path: '/postlogin/cloud-element', exact: true, name: 'Cloud Element', component: CloudElement },
-    { path: '/postlogin/config-summary-discovery', exact: true, name: 'Config Summary Discovery', component: ConfigSummaryDiscovery },
+    { path: '/postlogin/config-summary-discovery', exact: true, name: 'App Config', component: ConfigSummaryDiscovery },
 
 
 ]

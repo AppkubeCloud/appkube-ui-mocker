@@ -47,15 +47,15 @@ const MenuProps = {
 };
 
 const names = [
-  'APP_CONFIG_SUMMARY',
   'LAMBDA',
   'EKS',
   'ECS',
-  'VPC',
   'EC2',
   'RDS',
   'S3',
   'CDN',
+  'KINESYS',
+  'DYNAMODB'
 ];
 class CloudElement extends Component {
   constructor(props) {

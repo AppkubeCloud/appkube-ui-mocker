@@ -333,7 +333,7 @@ class ConfigSummaryDiscovery extends Component {
                     <div className="main-content">
                         <div className="vendor-content">
                             <div className="d-flex">
-                                <h4>Config Summary Discovery Table</h4>
+                                <h4>App Config Table</h4>
                                 <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.refreshConfigSummary}>
                                     <i className="fa fa-refresh"></i>
                                 </Button>

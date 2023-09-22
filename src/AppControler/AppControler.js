@@ -80,7 +80,7 @@ export const AppControler = ({ tabpage }) => {
                 return (
                     <CloudElement />
                 );
-            case "Config Summary Discovery":
+            case "App Config":
                 return (
                     <ConfigSummaryDiscovery />
                 );
