@@ -8,11 +8,11 @@ export const cloudElementServices = {
 }
 
 function addCloudElement(data) {
-//   const extraHeaders = {
-//     "Content-Type": "application/json"
-// };
-//   const requestOptions = commonFunctions.getRequestOptions("POST", extraHeaders, JSON.stringify(data));
-//   return fetch(`${apiEndPoint.ORGANIZARION}`, requestOptions).then(response => response);
+  //   const extraHeaders = {
+  //     "Content-Type": "application/json"
+  // };
+  //   const requestOptions = commonFunctions.getRequestOptions("POST", extraHeaders, JSON.stringify(data));
+  //   return fetch(`${apiEndPoint.ORGANIZARION}`, requestOptions).then(response => response);
 }
 
 
@@ -32,12 +32,15 @@ function getCloudElement(data) {
       url += `${url ? '&' : '?'}landingZone=${data.newPenv.landingZone}`;
     }
     if (data.newPenv.elementType) {
-      url += `${url ? '&' : '?'}elementType=${data.newPenv.elementType}`;
+      // for (let i = 0; i < data.newPenv.elementType.length; i++) {
+        url += `${url ? '&' : '?'}elementType=${data.newPenv.elementType}`;
+      // }
     }
     if (data.newPenv.awsRegion) {
       url += `${url ? '&' : '?'}awsRegion=${data.newPenv.awsRegion}`;
     }
   }
+  console.log("personName", data)
   const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
   return fetch(`${apiEndPoint.PRODUCT_ENV_SEARCH}${url}`, requestOptions).then(response => response.json());
 }

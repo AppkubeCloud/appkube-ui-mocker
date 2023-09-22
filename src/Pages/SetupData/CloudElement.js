@@ -20,12 +20,46 @@ import { connect } from "react-redux";
 import { status } from "../../_constants";
 import { DataGrid } from '@mui/x-data-grid';
 import '../../Table/table.css'
+import { MdContentCopy } from "react-icons/md";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  'LAMBDA',
+  'EKS',
+  'ECS',
+  'S3',
+];
 class CloudElement extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      personName: [],
+      isCopied: false,
+      open: false,
+      scroll: 'paper',
       organization: "",
       department: "",
       landingzone: "",
@@ -53,9 +87,35 @@ class CloudElement extends Component {
         {
           field: 'instanceId', headerName: 'Instance Id', flex: 1,
         },
+        {
+          field: '',
+          headerName: 'Config Json',
+          flex: 1,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" onClick={this.handleClickOpen('paper', params)}>View</Button>
+
+          ),
+        },
       ],
     };
+    this.descriptionElementRef = React.createRef();
   }
+  handleClickOpen = (scrollType, params) => () => {
+    this.setState({ open: true, scroll: scrollType, params: params });
+  };
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+  onCopyText = () => {
+    const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.configJson, null, 2);
+    navigator.clipboard.writeText(jsonString).then(() => {
+      alert.success('JSON data copied to clipboard!');
+    }).catch((error) => {
+      console.error('Error copying JSON data:', error);
+    });
+  };
 
   handleStateChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +124,14 @@ class CloudElement extends Component {
     });
 
   };
-
+  handleChangeSelect = (event) => {
+    const {
+      target: { value },
+    } = event;
+    this.setState({
+      personName: typeof value === 'string' ? value.split(',') : value,
+    });
+  };
   handleDepChange = (e) => {
     const { name, value } = e.target;
     this.setState({
@@ -126,7 +193,7 @@ class CloudElement extends Component {
 
 
   getCloudElement = async (event) => {
-    const { region, elementType, landingzone } = this.state;
+    const { region, personName, landingzone } = this.state;
     event.preventDefault();
     this.setState({
       isSubmitted: true
@@ -135,7 +202,7 @@ class CloudElement extends Component {
     if (newErrorData.isValid) {
       var newPenv = {
         "landingZone": landingzone,
-        "elementType": elementType,
+        "elementType": personName,
         "awsRegion": region
       };
       this.props.dispatch(cloudElementAction.getCloudElement({ newPenv }))
@@ -144,6 +211,12 @@ class CloudElement extends Component {
 
   componentDidMount = () => {
     this.props.dispatch(organizationAction.getOrganization({}))
+    if (this.state.open) {
+      const descriptionElement = this.descriptionElementRef.current;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+      }
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -179,12 +252,12 @@ class CloudElement extends Component {
   }
 
   refreshCloud = () => {
-    this.props.dispatch(cloudElementAction.getAllCloudElement({  }))
+    this.props.dispatch(cloudElementAction.getAllCloudElement({}))
   }
 
 
   render() {
-    const { orgList, cloudElementCloumn } = this.state;
+    const { orgList, cloudElementCloumn, open, scroll, personName } = this.state;
     return (
       <>
         <div className='form-container'>
@@ -270,6 +343,27 @@ class CloudElement extends Component {
                                           )
                                         })
                                       }
+                                      <FormControl sx={{ m: 1, width: 300,height:50}}>
+                                        <InputLabel id="demo-multiple-checkbox-label">Element Type</InputLabel>
+                                        <Select
+                                          labelId="demo-multiple-checkbox-label"
+                                          id="demo-multiple-checkbox"
+                                          multiple
+                                          value={personName}
+                                          placeholder="Element Type"
+                                          onChange={this.handleChangeSelect}
+                                          input={<OutlinedInput label="Tag" />}
+                                          renderValue={(selected) => selected.join(', ')}
+                                          MenuProps={MenuProps}
+                                        >
+                                          {names.map((name) => (
+                                            <MenuItem key={name} value={name}>
+                                              <Checkbox checked={personName.indexOf(name) > -1} />
+                                              <ListItemText primary={name} />
+                                            </MenuItem>
+                                          ))}
+                                        </Select>
+                                      </FormControl>
                                     </div>
                                   </div>
                                 </div>
@@ -313,6 +407,37 @@ class CloudElement extends Component {
               </div>
             </div>
           </div>
+        </div>
+
+        <div>
+
+          <Dialog
+            open={open}
+            onClose={this.handleClose}
+            scroll={scroll}
+            aria-labelledby="scroll-dialog-title"
+            aria-describedby="scroll-dialog-description"
+          >
+            <div className="d-flex" style={{ flexDirection: "row" }}>
+              <DialogTitle id="scroll-dialog-title">Config Json</DialogTitle>
+              <Button onClick={this.onCopyText}> <MdContentCopy />Copy</Button>
+            </div>
+            <DialogContent dividers={scroll === 'paper'}>
+              <DialogContentText
+                id="scroll-dialog-description"
+                ref={this.descriptionElementRef}
+                tabIndex={-1}
+              >
+                {
+                  <pre>{JSON.stringify(this.state.params != null && this.state.params.row.configJson, null, 2)}</pre>
+                }
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose}>Cancel</Button>
+
+            </DialogActions>
+          </Dialog>
         </div>
       </>
     );
