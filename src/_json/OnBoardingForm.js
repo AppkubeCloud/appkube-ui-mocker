@@ -513,7 +513,7 @@ const OnBoardingForm = {
     "config_summary": [
       {
         "order": 1,
-        "config_summary_title": "Config Summary Discovery",
+        "config_summary_title": "App Config",
         "fields": [
           {
             "name": "organization",

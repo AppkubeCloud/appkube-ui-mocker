@@ -28,7 +28,7 @@ function addConfigSummaryDiscovery(data) {
                                 create_config_summary_discovery: response
                             }
                         }));
-                        alert.success("Save config summary discovery Successfully");
+                        alert.success("Save App Config Successful");
                     } else {
                         dispatch(dispatchFunction({
                             type: status.FAILURE,

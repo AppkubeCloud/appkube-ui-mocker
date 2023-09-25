@@ -95,7 +95,7 @@ const _nav = [
             },
             {
                 _tag: 'SidebarNavItem',
-                name: 'Config Summary Discovery',
+                name: 'App Config',
                 to: '/postlogin/config-summary-discovery',
                 activeArr: ['/postlogin/config-summary-discovery'],
                 open: false,
