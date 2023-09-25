@@ -1,6 +1,6 @@
 import React from "react";
-// import DaTaSetup from "../Pages/DataView/DataSetup";
-import DataTree from "../Pages/DataTree/DataTree";
+ import LandingzoneTree from "../Pages/DataTree/LandingzoneTree";
+import BusinessElementTree from "../Pages/DataTree/BusinessElementTree";
 import Organization from "../Pages/SetupData/Organization";
 import Department from "../Pages/SetupData/Department";
 import Product from "../Pages/SetupData/Product";
@@ -20,13 +20,13 @@ export const AppControler = ({ tabpage }) => {
 
     const tabbComponents = () => {
         switch (tab_coponent) {
-            // case "Data Setup":
-            //     return (
-            //         <DaTaSetup />
-            //     );
-            case "Data Tree":
+            case "Landingzone Tree":
                 return (
-                    <DataTree />
+                    <LandingzoneTree />
+                );
+            case "Business Element Tree":
+                return (
+                    <BusinessElementTree />
                 );
             case "Organization":
                 return (

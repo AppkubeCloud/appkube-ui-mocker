@@ -20,12 +20,27 @@ import { connect } from "react-redux";
 import { status } from "../../_constants";
 import { DataGrid } from '@mui/x-data-grid';
 import '../../Table/table.css'
-
+import { MdContentCopy } from "react-icons/md";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 
 class ProductEnclave extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isCopied: false,
+            open: false,
+            scroll: 'paper',
             organization: "",
             department: "",
             landingzone: "",
@@ -50,10 +65,27 @@ class ProductEnclave extends Component {
                 {
                     field: 'instanceId', headerName: 'Instance Id', flex: 1,
                 },
+                {
+                    field: '',
+                    headerName: 'Meta Data',
+                    flex: 1,
+                    sortable: false,
+                    renderCell: (params) => (
+                        <Button variant="contained" color="primary" onClick={this.handleClickOpen('paper', params)}>View</Button>
 
+                    ),
+                },
             ],
         };
+        this.descriptionElementRef = React.createRef();
     }
+
+    handleClickOpen = (scrollType, params) => () => {
+        this.setState({ open: true, scroll: scrollType, params: params });
+    };
+    handleClose = () => {
+        this.setState({ open: false });
+    };
 
     handleStateChange = (e) => {
         const { name, value } = e.target;
@@ -180,9 +212,17 @@ class ProductEnclave extends Component {
         this.props.dispatch(productEnclaveAction.getproductEnclaveSearch({}))
     }
 
+ onCopyText = () => {
+        const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.metadata, null, 2);
+        navigator.clipboard.writeText(jsonString).then(() => {
+            alert.success('JSON data copied to clipboard!');
+        }).catch((error) => {
+            console.error('Error copying JSON data:', error);
+        });
+    };
 
     render() {
-        const { orgList, productEnclaveCloumn } = this.state;
+        const { orgList, productEnclaveCloumn, open, scroll } = this.state;
         return (
             <>
                 <div className='form-container'>
@@ -318,6 +358,36 @@ class ProductEnclave extends Component {
                         </div>
                     </div>
                 </div>
+                <div>
+
+          <Dialog
+            open={open}
+            onClose={this.handleClose}
+            scroll={scroll}
+            aria-labelledby="scroll-dialog-title"
+            aria-describedby="scroll-dialog-description"
+          >
+            <div className="d-flex" style={{ flexDirection: "row" }}>
+              <DialogTitle id="scroll-dialog-title">Meta Data Json</DialogTitle>
+              <Button onClick={this.onCopyText}> <MdContentCopy />Copy</Button>
+            </div>
+            <DialogContent dividers={scroll === 'paper'}>
+              <DialogContentText
+                id="scroll-dialog-description"
+                ref={this.descriptionElementRef}
+                tabIndex={-1}
+              >
+               {
+                  <pre>{JSON.stringify(this.state.params != null && this.state.params.row.metadata, null, 2)}</pre>
+                }
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose}>Cancel</Button>
+
+            </DialogActions>
+          </Dialog>
+        </div>
             </>
         );
     }

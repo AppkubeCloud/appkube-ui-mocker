@@ -1,23 +1,23 @@
 import React from 'react';
-// const DataSetup = React.lazy(() => import('../Pages/DataView/DataSetup'));
-const DataTree = React.lazy(() => import('../Pages/DataTree/DataTree'));
+const LandingzoneTree = React.lazy(() => import('../Pages/DataTree/LandingzoneTree'));
+const BusinessElementTree = React.lazy(() => import('../Pages/DataTree/BusinessElementTree'));
 const Organization = React.lazy(() => import('../Pages/SetupData/Organization'));
 const Department = React.lazy(() => import('../Pages/SetupData/Department'));
-const Product= React.lazy(() => import('../Pages/SetupData/Product'));
-const ProductEnv= React.lazy(() => import('../Pages/SetupData/ProductEnv'));
-const Module= React.lazy(() => import('../Pages/SetupData/Module'));
-const BusinessElement= React.lazy(() => import('../Pages/SetupData/BusinessElement'));
-const Budget= React.lazy(() => import('../Pages/SetupData/Budget'));
-const DbCategory= React.lazy(() => import('../Pages/SetupData/DbCategory'));
-const SecurityOrganization= React.lazy(() => import('../Pages/Security/SecurityOrganization'));
-const Landingzone= React.lazy(() => import('../Pages/SetupData/Landingzone'));
-const User= React.lazy(() => import('../Pages/Security/User'));
-const ProductEnclave= React.lazy(() => import('../Pages/SetupData/ProductEnclave'));
-const CloudElement= React.lazy(() => import('../Pages/SetupData/CloudElement'));
-const ConfigSummaryDiscovery= React.lazy(() => import('../Pages/SetupData/ConfigSummaryDiscovery'));
+const Product = React.lazy(() => import('../Pages/SetupData/Product'));
+const ProductEnv = React.lazy(() => import('../Pages/SetupData/ProductEnv'));
+const Module = React.lazy(() => import('../Pages/SetupData/Module'));
+const BusinessElement = React.lazy(() => import('../Pages/SetupData/BusinessElement'));
+const Budget = React.lazy(() => import('../Pages/SetupData/Budget'));
+const DbCategory = React.lazy(() => import('../Pages/SetupData/DbCategory'));
+const SecurityOrganization = React.lazy(() => import('../Pages/Security/SecurityOrganization'));
+const Landingzone = React.lazy(() => import('../Pages/SetupData/Landingzone'));
+const User = React.lazy(() => import('../Pages/Security/User'));
+const ProductEnclave = React.lazy(() => import('../Pages/SetupData/ProductEnclave'));
+const CloudElement = React.lazy(() => import('../Pages/SetupData/CloudElement'));
+const ConfigSummaryDiscovery = React.lazy(() => import('../Pages/SetupData/ConfigSummaryDiscovery'));
 const routes = [
-    // { path: '/postlogin/data-setup', exact: true, name: 'Data Setup', component: DataSetup },
-    { path: '/postlogin/data-tree', exact: true, name: 'Data Tree', component: DataTree },
+    { path: '/postlogin/landingzone-tree', exact: true, name: 'Landingzone Tree', component: LandingzoneTree },
+    { path: '/postlogin/business-element-tree', exact: true, name: 'Business Element Tree', component: BusinessElementTree },
     { path: '/postlogin/organization', exact: true, name: 'Organization', component: Organization },
     { path: '/postlogin/department', exact: true, name: 'Department', component: Department },
     { path: '/postlogin/product', exact: true, name: 'Product', component: Product },

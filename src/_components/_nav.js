@@ -105,10 +105,24 @@ const _nav = [
     {
         _tag: 'SidebarNavItem',
         name: 'CMDB Data Tree',
-        to: '/postlogin/data-tree',
-        activeArr: ['/postlogin/data-tree'],
         open: false,
         icon: <i className="fa-solid fa-tree"></i>,
+        children: [
+            {
+                _tag: 'SidebarNavItem',
+                name: 'Business Element Tree',
+                to: '/postlogin/business-element-tree',
+                activeArr: ['/postlogin/business-element-tree'],
+                open: false,
+            },
+            {
+                _tag: 'SidebarNavItem',
+                name: 'Landingzone Tree',
+                to: '/postlogin/landingzone-tree',
+                activeArr: ['/postlogin/landingzone-tree'],
+                open: false,
+            }
+        ]
     },
     {
         _tag: 'SidebarNavItem',
