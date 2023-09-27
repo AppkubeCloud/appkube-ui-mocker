@@ -15,6 +15,8 @@ const User = React.lazy(() => import('../Pages/Security/User'));
 const ProductEnclave = React.lazy(() => import('../Pages/SetupData/ProductEnclave'));
 const CloudElement = React.lazy(() => import('../Pages/SetupData/CloudElement'));
 const ConfigSummaryDiscovery = React.lazy(() => import('../Pages/SetupData/ConfigSummaryDiscovery'));
+const CostDataGenerator = React.lazy(() => import('../Pages/DataGenerator/CostDataGenerator'));
+const SlaDataGenerator = React.lazy(() => import('../Pages/DataGenerator/SlaDataGenerator'));
 const routes = [
     { path: '/postlogin/landingzone-tree', exact: true, name: 'Landingzone Tree', component: LandingzoneTree },
     { path: '/postlogin/business-element-tree', exact: true, name: 'Business Element Tree', component: BusinessElementTree },
@@ -32,6 +34,8 @@ const routes = [
     { path: '/postlogin/product-enclave', exact: true, name: 'Product Enclave', component: ProductEnclave },
     { path: '/postlogin/cloud-element', exact: true, name: 'Cloud Element', component: CloudElement },
     { path: '/postlogin/config-summary-discovery', exact: true, name: 'App Config', component: ConfigSummaryDiscovery },
+    { path: '/postlogin/cost-data', exact: true, name: 'Cost Data', component: CostDataGenerator },
+    { path: '/postlogin/sla-data', exact: true, name: 'Sla Data', component: SlaDataGenerator },
 
 
 ]

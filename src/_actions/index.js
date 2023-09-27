@@ -14,3 +14,5 @@ export * from './user.action';
 export * from './productenclave.action';
 export * from './cloudelement.action';
 export * from './configsummarydiscovery.action';
+export * from './costdata.action';
+export * from './sladata.action';

@@ -1,5 +1,6 @@
 import 'react-pro-sidebar/dist/css/styles.css'
 import SecurityIcon from '@mui/icons-material/Security';
+import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
 const _nav = [
 
     {
@@ -126,9 +127,29 @@ const _nav = [
     },
     {
         _tag: 'SidebarNavItem',
-        name: 'Security Data Setup',
+        name: 'CMDB Data Generator',
         open: false,
-        activeArr: ['/postlogin/security-organization'],
+        icon: <DataSaverOnIcon/>,
+        children: [
+            {
+                _tag: 'SidebarNavItem',
+                name: 'Cost Data',
+                to: '/postlogin/cost-data',
+                activeArr: ['/postlogin/cost-data'],
+                open: false,
+            },
+            {
+                _tag: 'SidebarNavItem',
+                name: 'Sla Data',
+                to: '/postlogin/sla-data',
+                activeArr: ['/postlogin/sla-data'],
+                open: false,
+            }
+        ]
+    },
+    {
+        _tag: 'SidebarNavItem',
+        name: 'Security Data Setup',
         open: false,
         icon: <SecurityIcon/>,
         children: [

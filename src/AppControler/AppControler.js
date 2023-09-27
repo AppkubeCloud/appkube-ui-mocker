@@ -1,5 +1,5 @@
 import React from "react";
- import LandingzoneTree from "../Pages/DataTree/LandingzoneTree";
+import LandingzoneTree from "../Pages/DataTree/LandingzoneTree";
 import BusinessElementTree from "../Pages/DataTree/BusinessElementTree";
 import Organization from "../Pages/SetupData/Organization";
 import Department from "../Pages/SetupData/Department";
@@ -15,6 +15,8 @@ import User from '../Pages/Security/User';
 import ProductEnclave from '../Pages/SetupData/ProductEnclave';
 import CloudElement from '../Pages/SetupData/CloudElement';
 import ConfigSummaryDiscovery from '../Pages/SetupData/ConfigSummaryDiscovery';
+import CostDataGenerator from '../Pages/DataGenerator/CostDataGenerator';
+import SlaDataGenerator from '../Pages/DataGenerator/SlaDataGenerator';
 export const AppControler = ({ tabpage }) => {
     let tab_coponent = tabpage.name;
 
@@ -84,8 +86,14 @@ export const AppControler = ({ tabpage }) => {
                 return (
                     <ConfigSummaryDiscovery />
                 );
-
-
+            case "Cost Data":
+                return (
+                    <CostDataGenerator />
+                );
+            case "Sla Data":
+                return (
+                    <SlaDataGenerator />
+                );
         }
     }
 

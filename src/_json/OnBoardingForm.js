@@ -559,6 +559,54 @@ const OnBoardingForm = {
         ]
       }
     ],
+    "cost_data": [
+      {
+        "order": 1,
+        "cost_data_title": "Cost Data Generator",
+        "fields": [
+          {
+            "name": "startDate",
+            "lable": "Start Date",
+            "required": false,
+            "data_type": "String",
+            "html_element": "textbox",
+            "place_holder": "yyyy-MM-dd"
+          },
+          {
+            "name": "endDate",
+            "lable": "End Date",
+            "required": false,
+            "data_type": "String",
+            "html_element": "textbox",
+            "place_holder": "yyyy-MM-dd"
+          },
+        ]
+      }
+    ],
+    "sla_data": [
+      {
+        "order": 1,
+        "sla_data_title": "Sla Data Generator",
+        "fields": [
+          {
+            "name": "startDate",
+            "lable": "Start Date",
+            "required": false,
+            "data_type": "String",
+            "html_element": "textbox",
+            "place_holder": "yyyy-MM-dd"
+          },
+          {
+            "name": "endDate",
+            "lable": "End Date",
+            "required": false,
+            "data_type": "String",
+            "html_element": "textbox",
+            "place_holder": "yyyy-MM-dd"
+          },
+        ]
+      }
+    ],
   }
 };
 
