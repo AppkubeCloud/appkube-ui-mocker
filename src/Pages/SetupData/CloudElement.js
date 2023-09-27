@@ -64,6 +64,8 @@ class CloudElement extends Component {
       personName: [],
       isCopied: false,
       open: false,
+      costOpen: false,
+      slaOpen: false,
       scroll: 'paper',
       organization: "",
       department: "",
@@ -93,12 +95,32 @@ class CloudElement extends Component {
           field: 'instanceId', headerName: 'Instance Id', flex: 1,
         },
         {
-          field: '',
+          field: 'configJson',
           headerName: 'Config Json',
           flex: 1,
           sortable: false,
           renderCell: (params) => (
             <Button variant="contained" color="primary" onClick={this.handleClickOpen('paper', params)}>View</Button>
+
+          ),
+        },
+        {
+          field: 'costJson',
+          headerName: 'Cost Json',
+          flex: 1,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" onClick={this.handleClickOpenCost('paper', params)}>View</Button>
+
+          ),
+        },
+        {
+          field: 'slaJson',
+          headerName: 'Sla Json',
+          flex: 1,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" onClick={this.handleClickOpenSla('paper', params)}>View</Button>
 
           ),
         },
@@ -109,12 +131,43 @@ class CloudElement extends Component {
   handleClickOpen = (scrollType, params) => () => {
     this.setState({ open: true, scroll: scrollType, params: params });
   };
+  handleClickOpenCost = (scrollType, params) => () => {
+    this.setState({ costOpen: true, scroll: scrollType, params: params });
+  };
+  handleClickOpenSla = (scrollType, params) => () => {
+    this.setState({ slaOpen: true, scroll: scrollType, params: params });
+  };
+  
   handleClose = () => {
     this.setState({ open: false });
+  };
+  handleCloseCost = () => {
+    this.setState({ costOpen: false });
+  };
+  handleCloseSla = () => {
+    this.setState({ slaOpen: false });
   };
 
   onCopyText = () => {
     const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.configJson, null, 2);
+    navigator.clipboard.writeText(jsonString).then(() => {
+      alert.success('JSON data copied to clipboard!');
+    }).catch((error) => {
+      console.error('Error copying JSON data:', error);
+    });
+  };
+
+  onCopyCostText= () => {
+    const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.costJson, null, 2);
+    navigator.clipboard.writeText(jsonString).then(() => {
+      alert.success('JSON data copied to clipboard!');
+    }).catch((error) => {
+      console.error('Error copying JSON data:', error);
+    });
+  };
+
+  onCopySlaText= () => {
+    const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.slaJson, null, 2);
     navigator.clipboard.writeText(jsonString).then(() => {
       alert.success('JSON data copied to clipboard!');
     }).catch((error) => {
@@ -262,7 +315,7 @@ class CloudElement extends Component {
 
 
   render() {
-    const { orgList, cloudElementCloumn, open, scroll, personName } = this.state;
+    const { orgList, cloudElementCloumn, open,costOpen, scroll, personName,slaOpen } = this.state;
     return (
       <>
         <div className='form-container'>
@@ -349,8 +402,8 @@ class CloudElement extends Component {
                                         })
                                       }
                                       <FormControl className="select" >
-                                      <label className="d-block">Cloud Element</label>
-                                        <Select style={{height:"50px"}}
+                                        <label className="d-block">Cloud Element</label>
+                                        <Select style={{ height: "50px" }}
                                           labelId="demo-multiple-checkbox-label"
                                           id="demo-multiple-checkbox"
                                           multiple
@@ -415,7 +468,6 @@ class CloudElement extends Component {
         </div>
 
         <div>
-
           <Dialog
             open={open}
             onClose={this.handleClose}
@@ -440,6 +492,66 @@ class CloudElement extends Component {
             </DialogContent>
             <DialogActions>
               <Button onClick={this.handleClose}>Cancel</Button>
+
+            </DialogActions>
+          </Dialog>
+        </div>
+
+        <div>
+          <Dialog
+            open={costOpen}
+            onClose={this.handleCloseCost}
+            scroll={scroll}
+            aria-labelledby="scroll-dialog-title"
+            aria-describedby="scroll-dialog-description"
+          >
+            <div className="d-flex" style={{ flexDirection: "row" }}>
+              <DialogTitle id="scroll-dialog-title">Config Json</DialogTitle>
+              <Button onClick={this.onCopyCostText}> <MdContentCopy />Copy</Button>
+            </div>
+            <DialogContent dividers={scroll === 'paper'}>
+              <DialogContentText
+                id="scroll-dialog-description"
+                ref={this.descriptionElementRef}
+                tabIndex={-1}
+              >
+                {
+                  <pre>{JSON.stringify(this.state.params != null && this.state.params.row.costJson, null, 2)}</pre>
+                }
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleCloseCost}>Cancel</Button>
+
+            </DialogActions>
+          </Dialog>
+        </div>
+
+        <div>
+          <Dialog
+            open={slaOpen}
+            onClose={this.handleCloseSla}
+            scroll={scroll}
+            aria-labelledby="scroll-dialog-title"
+            aria-describedby="scroll-dialog-description"
+          >
+            <div className="d-flex" style={{ flexDirection: "row" }}>
+              <DialogTitle id="scroll-dialog-title">Config Json</DialogTitle>
+              <Button onClick={this.onCopySlaText}> <MdContentCopy />Copy</Button>
+            </div>
+            <DialogContent dividers={scroll === 'paper'}>
+              <DialogContentText
+                id="scroll-dialog-description"
+                ref={this.descriptionElementRef}
+                tabIndex={-1}
+              >
+                {
+                  <pre>{JSON.stringify(this.state.params != null && this.state.params.row.slaJson, null, 2)}</pre>
+                }
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleCloseSla}>Cancel</Button>
 
             </DialogActions>
           </Dialog>

@@ -129,7 +129,7 @@ const _nav = [
         _tag: 'SidebarNavItem',
         name: 'CMDB Data Generator',
         open: false,
-        icon: <DataSaverOnIcon/>,
+        icon: <DataSaverOnIcon />,
         children: [
             {
                 _tag: 'SidebarNavItem',
@@ -151,7 +151,7 @@ const _nav = [
         _tag: 'SidebarNavItem',
         name: 'Security Data Setup',
         open: false,
-        icon: <SecurityIcon/>,
+        icon: <SecurityIcon />,
         children: [
             {
                 _tag: 'SidebarNavItem',
