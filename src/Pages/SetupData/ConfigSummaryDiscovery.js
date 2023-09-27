@@ -18,7 +18,7 @@ import SaveAsIcon from '@mui/icons-material/SaveAs';
 import { departmentAction, organizationAction, landingzoneAction, productAction, configSummaryDiscoveryAction } from "../../_actions";
 import { connect } from "react-redux";
 import { status } from "../../_constants";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import '../../Table/table.css'
 import { MdContentCopy } from "react-icons/md";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -71,6 +71,9 @@ class ConfigSummaryDiscovery extends Component {
         };
         this.descriptionElementRef = React.createRef();
     }
+    handleColumnReorder = (newColumns) => {
+        this.setState({ configSummaryDiscoveryCloumn: newColumns });
+    };
     handleClickOpen = (scrollType, params) => () => {
         this.setState({ open: true, scroll: scrollType, params: params });
     };
@@ -380,12 +383,18 @@ class ConfigSummaryDiscovery extends Component {
                                 <DataGrid
                                     rows={this.props.config_summary_discovery_list != null && this.props.config_summary_discovery_list}
                                     columns={configSummaryDiscoveryCloumn}
-                                    initialState={{
-                                        pagination: {
-                                            paginationModel: { page: 0, pageSize: 5 },
-                                        },
-                                    }}
-                                    pageSizeOptions={[5, 10]}
+                                    components={{
+                                        Toolbar: GridToolbar,
+                                      }}
+                                      onColumnOrderChange={this.handleColumnReorder}
+                                      autoGroupColumnDef={{
+                                        headerName: 'Group',
+                                        field: 'id',
+                                        width: 150,
+                                        valueGetter: (params) => params.row.id,
+                                        cellRenderer: 'agGroupCellRenderer',
+                                      }}
+                                      groupMode="single"
                                 />
                             </div>
                         </div>

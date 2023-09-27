@@ -18,7 +18,7 @@ import SaveAsIcon from '@mui/icons-material/SaveAs';
 import { budgetAction, dbCategoryAction, organizationAction } from "../../_actions";
 import { connect } from "react-redux";
 import { status } from "../../_constants";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid , GridToolbar} from '@mui/x-data-grid';
 import '../../Table/table.css'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
@@ -46,7 +46,9 @@ class DbCategory extends Component {
             ],
         };
     }
-
+    handleColumnReorder = (newColumns) => {
+        this.setState({ dbCategoryCloumn: newColumns });
+    };
     handleStateChange = (e) => {
         const { name, value } = e.target;
         this.setState({
@@ -273,12 +275,18 @@ class DbCategory extends Component {
                                 <DataGrid
                                     rows={this.props.db_category_list != null && this.props.db_category_list}
                                     columns={dbCategoryCloumn}
-                                    initialState={{
-                                        pagination: {
-                                            paginationModel: { page: 0, pageSize: 5 },
-                                        },
-                                    }}
-                                    pageSizeOptions={[5, 10]}
+                                    components={{
+                                        Toolbar: GridToolbar,
+                                      }}
+                                      onColumnOrderChange={this.handleColumnReorder}
+                                      autoGroupColumnDef={{
+                                        headerName: 'Group',
+                                        field: 'id',
+                                        width: 150,
+                                        valueGetter: (params) => params.row.id,
+                                        cellRenderer: 'agGroupCellRenderer',
+                                      }}
+                                      groupMode="single"
                                 />
                             </div>
                         </div>

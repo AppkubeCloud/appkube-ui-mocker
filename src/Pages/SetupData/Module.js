@@ -17,7 +17,7 @@ import SaveAsIcon from '@mui/icons-material/SaveAs';
 import { businessElementAction, departmentAction, moduleAction, organizationAction, productAction, productEnvAction } from "../../_actions";
 import { connect } from "react-redux";
 import { status } from "../../_constants";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import '../../Table/table.css'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
@@ -55,7 +55,9 @@ class DataSetup extends Component {
             ],
         };
     }
-
+    handleColumnReorder = (newColumns) => {
+        this.setState({ moduleCloumn: newColumns });
+    };
     handleStateChange = (e) => {
         const { name, value } = e.target;
         this.setState({
@@ -365,12 +367,18 @@ class DataSetup extends Component {
                                 <DataGrid
                                     rows={this.props.module_list != null && this.props.module_list}
                                     columns={moduleCloumn}
-                                    initialState={{
-                                        pagination: {
-                                            paginationModel: { page: 0, pageSize: 5 },
-                                        },
-                                    }}
-                                    pageSizeOptions={[5, 10]}
+                                    components={{
+                                        Toolbar: GridToolbar,
+                                      }}
+                                      onColumnOrderChange={this.handleColumnReorder}
+                                      autoGroupColumnDef={{
+                                        headerName: 'Group',
+                                        field: 'id',
+                                        width: 150,
+                                        valueGetter: (params) => params.row.id,
+                                        cellRenderer: 'agGroupCellRenderer',
+                                      }}
+                                      groupMode="single"
                                 />
                             </div>
                         </div>

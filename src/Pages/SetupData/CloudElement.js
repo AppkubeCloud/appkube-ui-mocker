@@ -18,7 +18,7 @@ import SaveAsIcon from '@mui/icons-material/SaveAs';
 import { departmentAction, productEnclaveAction, organizationAction, landingzoneAction, productAction, cloudElementAction } from "../../_actions";
 import { connect } from "react-redux";
 import { status } from "../../_constants";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import '../../Table/table.css'
 import { MdContentCopy } from "react-icons/md";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -344,6 +344,10 @@ class CloudElement extends Component {
       alert.error("Please refresh a table");
     }
   };
+
+  handleColumnReorder = (newColumns) => {
+    this.setState({ cloudElementCloumn: newColumns });
+  };
   render() {
     const { orgList, cloudElementCloumn, open, costOpen, scroll, personName, slaOpen } = this.state;
 
@@ -493,12 +497,18 @@ class CloudElement extends Component {
                 <DataGrid
                   rows={this.props.cloud_element_list != null && this.props.cloud_element_list}
                   columns={cloudElementCloumn}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
+                  components={{
+                    Toolbar: GridToolbar,
                   }}
-                  pageSizeOptions={[5, 10]}
+                  onColumnOrderChange={this.handleColumnReorder}
+                  autoGroupColumnDef={{
+                    headerName: 'Group',
+                    field: 'id',
+                    width: 150,
+                    valueGetter: (params) => params.row.id,
+                    cellRenderer: 'agGroupCellRenderer',
+                  }}
+                  groupMode="single"
                 />
               </div>
             </div>
