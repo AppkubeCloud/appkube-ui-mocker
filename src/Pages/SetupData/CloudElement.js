@@ -33,8 +33,10 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-
-
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { stringify } from 'csv-stringify/lib/sync';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -137,7 +139,7 @@ class CloudElement extends Component {
   handleClickOpenSla = (scrollType, params) => () => {
     this.setState({ slaOpen: true, scroll: scrollType, params: params });
   };
-  
+
   handleClose = () => {
     this.setState({ open: false });
   };
@@ -157,7 +159,7 @@ class CloudElement extends Component {
     });
   };
 
-  onCopyCostText= () => {
+  onCopyCostText = () => {
     const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.costJson, null, 2);
     navigator.clipboard.writeText(jsonString).then(() => {
       alert.success('JSON data copied to clipboard!');
@@ -166,7 +168,7 @@ class CloudElement extends Component {
     });
   };
 
-  onCopySlaText= () => {
+  onCopySlaText = () => {
     const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.slaJson, null, 2);
     navigator.clipboard.writeText(jsonString).then(() => {
       alert.success('JSON data copied to clipboard!');
@@ -313,9 +315,38 @@ class CloudElement extends Component {
     this.props.dispatch(cloudElementAction.getAllCloudElement({}))
   }
 
+  exportToExcel = () => {
+    if (this.props.cloud_element_list && this.props.cloud_element_list.length > 0) {
+      const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+      const fileExtension = '.xlsx';
+      const fileName = 'cloud Element';
+      const ws = XLSX.utils.json_to_sheet(this.props.cloud_element_list);
+      const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const data = new Blob([excelBuffer], { type: fileType });
+      saveAs(data, fileName + fileExtension);
+      alert.success("Export To Excel Successfully");
+    }
+    else {
+      alert.error("Please refresh a table");
+    }
+  };
+  exportToCSV = () => {
+    if (this.props.cloud_element_list && this.props.cloud_element_list.length > 0) {
+      const fileName = 'data.csv';
+      const csvData = stringify(this.props.cloud_element_list != null && this.props.cloud_element_list, { header: true });
 
+      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+      saveAs(blob, fileName);
+      alert.success("Export To CSV Successfully");
+    }
+    else {
+      alert.error("Please refresh a table");
+    }
+  };
   render() {
-    const { orgList, cloudElementCloumn, open,costOpen, scroll, personName,slaOpen } = this.state;
+    const { orgList, cloudElementCloumn, open, costOpen, scroll, personName, slaOpen } = this.state;
+
     return (
       <>
         <div className='form-container'>
@@ -450,6 +481,13 @@ class CloudElement extends Component {
                 <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.refreshCloud}>
                   <i className="fa fa-refresh"></i>
                 </Button>
+                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.exportToExcel}>
+                  <ArrowDownwardIcon className="mr-2" /> Export to Excel
+                </Button>
+                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.exportToCSV}>
+                  <ArrowDownwardIcon className="mr-2" />Export to CSV
+                </Button>
+
               </div>
               <div className="mt-3" style={{ height: 400, width: '100%' }}>
                 <DataGrid
@@ -522,7 +560,6 @@ class CloudElement extends Component {
             </DialogContent>
             <DialogActions>
               <Button onClick={this.handleCloseCost}>Cancel</Button>
-
             </DialogActions>
           </Dialog>
         </div>
@@ -556,6 +593,7 @@ class CloudElement extends Component {
             </DialogActions>
           </Dialog>
         </div>
+
       </>
     );
   }

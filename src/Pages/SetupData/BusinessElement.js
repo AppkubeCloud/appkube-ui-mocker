@@ -20,6 +20,10 @@ import { connect } from "react-redux";
 import { status } from "../../_constants";
 import { DataGrid } from '@mui/x-data-grid';
 import '../../Table/table.css'
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { stringify } from 'csv-stringify/lib/sync';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 class BusinessElement extends Component {
     constructor(props) {
         super(props);
@@ -221,7 +225,35 @@ class BusinessElement extends Component {
         this.props.dispatch(businessElementAction.getBusinessElement({}))
     }
 
+    exportToExcel = () => {
+        if (this.props.business_element_list && this.props.business_element_list.length > 0) {
+            const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+            const fileExtension = '.xlsx';
+            const fileName = 'business_element';
+            const ws = XLSX.utils.json_to_sheet(this.props.business_element_list);
+            const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            const data = new Blob([excelBuffer], { type: fileType });
+            saveAs(data, fileName + fileExtension);
+            alert.success("Export To Excel Successfully");
+        }
+        else {
+            alert.error("Please refresh a table");
+        }
+    };
+    exportToCSV = () => {
+        if (this.props.business_element_list && this.props.business_element_list.length > 0) {
+            const fileName = 'business_element.csv';
+            const csvData = stringify(this.props.business_element_list != null && this.props.business_element_list, { header: true });
 
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            saveAs(blob, fileName);
+            alert.success("Export To CSV Successfully");
+        }
+        else {
+            alert.error("Please refresh a table");
+        }
+    };
 
     render() {
         const { orgList, businessElementCloumn } = this.state;
@@ -366,6 +398,12 @@ class BusinessElement extends Component {
                                 <h4>Business Element Table</h4>
                                 <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.refreshBuniessElement}>
                                     <i className="fa fa-refresh"></i>
+                                </Button>
+                                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.exportToExcel}>
+                                    <ArrowDownwardIcon className="mr-2" /> Export to Excel
+                                </Button>
+                                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.exportToCSV}>
+                                    <ArrowDownwardIcon className="mr-2" />Export to CSV
                                 </Button>
                             </div>
                             <div className="mt-3" style={{ height: 400, width: '100%' }}>

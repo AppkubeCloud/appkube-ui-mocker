@@ -19,6 +19,10 @@ import { connect } from "react-redux";
 import { status } from "../../_constants";
 import { DataGrid } from '@mui/x-data-grid';
 import '../../Table/table.css'
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { stringify } from 'csv-stringify/lib/sync';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 class DataSetup extends Component {
     constructor(props) {
@@ -189,6 +193,35 @@ class DataSetup extends Component {
     refreshModule = () => {
         this.props.dispatch(moduleAction.getModule({}))
     }
+    exportToExcel = () => {
+        if (this.props.module_list && this.props.module_list.length > 0) {
+            const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+            const fileExtension = '.xlsx';
+            const fileName = 'module';
+            const ws = XLSX.utils.json_to_sheet(this.props.module_list);
+            const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            const data = new Blob([excelBuffer], { type: fileType });
+            saveAs(data, fileName + fileExtension);
+            alert.success("Export To Excel Successfully");
+        }
+        else {
+            alert.error("Please refresh a table");
+        }
+    };
+    exportToCSV = () => {
+        if (this.props.module_list && this.props.module_list.length > 0) {
+            const fileName = 'module.csv';
+            const csvData = stringify(this.props.module_list != null && this.props.module_list, { header: true });
+
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            saveAs(blob, fileName);
+            alert.success("Export To CSV Successfully");
+        }
+        else {
+            alert.error("Please refresh a table");
+        }
+    };
 
     render() {
         const { orgList, moduleCloumn } = this.state;
@@ -320,6 +353,12 @@ class DataSetup extends Component {
                                 <h4>Module Table</h4>
                                 <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.refreshModule}>
                                     <i className="fa fa-refresh"></i>
+                                </Button>
+                                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.exportToExcel}>
+                                    <ArrowDownwardIcon className="mr-2" /> Export to Excel
+                                </Button>
+                                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.exportToCSV}>
+                                    <ArrowDownwardIcon className="mr-2" />Export to CSV
                                 </Button>
                             </div>
                             <div className="mt-3" style={{ height: 400, width: '100%' }}>

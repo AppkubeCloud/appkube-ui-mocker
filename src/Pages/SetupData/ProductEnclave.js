@@ -33,7 +33,10 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { stringify } from 'csv-stringify/lib/sync';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 class ProductEnclave extends Component {
     constructor(props) {
         super(props);
@@ -212,13 +215,42 @@ class ProductEnclave extends Component {
         this.props.dispatch(productEnclaveAction.getproductEnclaveSearch({}))
     }
 
- onCopyText = () => {
+    onCopyText = () => {
         const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.metadata, null, 2);
         navigator.clipboard.writeText(jsonString).then(() => {
             alert.success('JSON data copied to clipboard!');
         }).catch((error) => {
             console.error('Error copying JSON data:', error);
         });
+    };
+    exportToExcel = () => {
+        if (this.props.product_enclave_list && this.props.product_enclave_list.length > 0) {
+            const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+            const fileExtension = '.xlsx';
+            const fileName = 'product_enclave';
+            const ws = XLSX.utils.json_to_sheet(this.props.product_enclave_list);
+            const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            const data = new Blob([excelBuffer], { type: fileType });
+            saveAs(data, fileName + fileExtension);
+            alert.success("Export To Excel Successfully");
+        }
+        else {
+            alert.error("Please refresh a table");
+        }
+    };
+    exportToCSV = () => {
+        if (this.props.product_enclave_list && this.props.product_enclave_list.length > 0) {
+            const fileName = 'product_enclave.csv';
+            const csvData = stringify(this.props.product_enclave_list != null && this.props.product_enclave_list, { header: true });
+
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            saveAs(blob, fileName);
+            alert.success("Export To CSV Successfully");
+        }
+        else {
+            alert.error("Please refresh a table");
+        }
     };
 
     render() {
@@ -342,6 +374,12 @@ class ProductEnclave extends Component {
                                 <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.refreshProductEnclave}>
                                     <i className="fa fa-refresh"></i>
                                 </Button>
+                                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.exportToExcel}>
+                                    <ArrowDownwardIcon className="mr-2" /> Export to Excel
+                                </Button>
+                                <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.exportToCSV}>
+                                    <ArrowDownwardIcon className="mr-2" />Export to CSV
+                                </Button>
                             </div>
                             <div className="mt-3" style={{ height: 400, width: '100%' }}>
                                 <DataGrid
@@ -360,34 +398,34 @@ class ProductEnclave extends Component {
                 </div>
                 <div>
 
-          <Dialog
-            open={open}
-            onClose={this.handleClose}
-            scroll={scroll}
-            aria-labelledby="scroll-dialog-title"
-            aria-describedby="scroll-dialog-description"
-          >
-            <div className="d-flex" style={{ flexDirection: "row" }}>
-              <DialogTitle id="scroll-dialog-title">Meta Data Json</DialogTitle>
-              <Button onClick={this.onCopyText}> <MdContentCopy />Copy</Button>
-            </div>
-            <DialogContent dividers={scroll === 'paper'}>
-              <DialogContentText
-                id="scroll-dialog-description"
-                ref={this.descriptionElementRef}
-                tabIndex={-1}
-              >
-               {
-                  <pre>{JSON.stringify(this.state.params != null && this.state.params.row.metadata, null, 2)}</pre>
-                }
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose}>Cancel</Button>
+                    <Dialog
+                        open={open}
+                        onClose={this.handleClose}
+                        scroll={scroll}
+                        aria-labelledby="scroll-dialog-title"
+                        aria-describedby="scroll-dialog-description"
+                    >
+                        <div className="d-flex" style={{ flexDirection: "row" }}>
+                            <DialogTitle id="scroll-dialog-title">Meta Data Json</DialogTitle>
+                            <Button onClick={this.onCopyText}> <MdContentCopy />Copy</Button>
+                        </div>
+                        <DialogContent dividers={scroll === 'paper'}>
+                            <DialogContentText
+                                id="scroll-dialog-description"
+                                ref={this.descriptionElementRef}
+                                tabIndex={-1}
+                            >
+                                {
+                                    <pre>{JSON.stringify(this.state.params != null && this.state.params.row.metadata, null, 2)}</pre>
+                                }
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleClose}>Cancel</Button>
 
-            </DialogActions>
-          </Dialog>
-        </div>
+                        </DialogActions>
+                    </Dialog>
+                </div>
             </>
         );
     }
