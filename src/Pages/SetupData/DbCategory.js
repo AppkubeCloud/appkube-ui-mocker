@@ -22,7 +22,6 @@ import { DataGrid , GridToolbar} from '@mui/x-data-grid';
 import '../../Table/table.css'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-import { stringify } from 'csv-stringify/lib/sync';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 class DbCategory extends Component {
@@ -151,7 +150,7 @@ class DbCategory extends Component {
     exportToCSV = () => {
         if (this.props.db_category_list && this.props.db_category_list.length > 0) {
             const fileName = 'db_category.csv';
-            const csvData = stringify(this.props.db_category_list != null && this.props.db_category_list, { header: true });
+            const csvData = JSON.stringify(this.props.db_category_list != null && this.props.db_category_list, { header: true });
 
             const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
             saveAs(blob, fileName);

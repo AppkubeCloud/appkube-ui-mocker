@@ -8,7 +8,9 @@ import Collapse from '@mui/material/Collapse';
 import { connect } from 'react-redux';
 import { businessElementAction, departmentAction, moduleAction, organizationAction, productAction, productEnvAction } from '../../_actions';
 import { status } from '../../_constants';
-
+import { MdContentCopy } from "react-icons/md";
+import { ListItemIcon } from '@mui/material';
+import { alert } from '../../_utilities';
 
 
 class MinusSquare extends Component {
@@ -82,6 +84,20 @@ const StyledTreeItem = styled((props) => (
 
 
 class CustomizedTreeView extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedValues: {
+                org: null,
+                dep: null,
+                product: null,
+                productEnv: null,
+                module: null,
+                businessElement: null,
+            },
+            generatedURL: '',
+        };
+    }
 
     componentDidMount = () => {
         this.props.dispatch(organizationAction.getOrganization({}))
@@ -131,31 +147,77 @@ class CustomizedTreeView extends Component {
             }
         }
     }
-    onClickOrg = (e, orgId) => {
-        this.props.dispatch(departmentAction.getDepartment({ organizationId: orgId }))
+    onClickOrg = (level, value) => {
+        this.setState((prevState) => ({
+            selectedValues: {
+                ...prevState.selectedValues,
+                [level]: value,
+            },
+        }));
+        this.props.dispatch(departmentAction.getDepartment({ organizationId: value.id }))
     };
-    onClickDep = (e, depId) => {
-        this.props.dispatch(productAction.getProduct({ departmentId: depId }))
+    onClickDep = (level, value) => {
+        this.setState((prevState) => ({
+            selectedValues: {
+                ...prevState.selectedValues,
+                [level]: value,
+            },
+        }));
+        this.props.dispatch(productAction.getProduct({ departmentId: value.id }))
     };
-    onClickProduct = (e, proId) => {
-        this.props.dispatch(productEnvAction.getProductEnv({ productId: proId }))
+    onClickProduct = (level, value) => {
+        this.setState((prevState) => ({
+            selectedValues: {
+                ...prevState.selectedValues,
+                [level]: value,
+            },
+        }));
+        this.props.dispatch(productEnvAction.getProductEnv({ productId: value.id }))
     };
-    onClickProductEnv = (e, proEnvId) => {
-        this.props.dispatch(moduleAction.getModule({ productEnvId: proEnvId }))
+    onClickProductEnv = (level, value) => {
+        this.setState((prevState) => ({
+            selectedValues: {
+                ...prevState.selectedValues,
+                [level]: value,
+            },
+        }));
+        this.props.dispatch(moduleAction.getModule({ productEnvId: value.id }))
     };
-    onClickModule = (e, moduleId) => {
-        this.props.dispatch(businessElementAction.getBusinessElement({ moduleId: moduleId }))
+    onClickModule = (level, value) => {
+        this.setState((prevState) => ({
+            selectedValues: {
+                ...prevState.selectedValues,
+                [level]: value,
+            },
+        }));
+        this.props.dispatch(businessElementAction.getBusinessElement({ moduleId: value.id }))
     }
+
+    constructURL = (businessElement) => {
+        const { selectedValues } = this.state;
+        console.log(selectedValues, businessElement)
+        let url = `${selectedValues.org.name}/${selectedValues.dep.name}/${selectedValues.product.name}/${selectedValues.productEnv.name}/${businessElement.serviceNature}/${selectedValues.module.name}/${businessElement.serviceName}`
+        const jsonString = JSON.stringify(url, null, 2).replace(/"/g, '');;
+        navigator.clipboard.writeText(jsonString).then(() => {
+            alert.success('Url copied to clipboard!');
+        }).catch((error) => {
+            alert.error('Error copying url data:', error);
+        });
+    };
+
+
     render() {
+        const { selectedValues } = this.state;
+        const { org, dep, product, productEnv, module, businessElement } = selectedValues;
         return (
             <>
                 <div className='form-container'>
-                    <div className='d-flex' style={{flexDirection: "column"}}>
+                    <div className='d-flex' style={{ flexDirection: "column" }}>
                         {
                             this.props?.organization_list?.map((orgData, index) => (
 
                                 <div className="main-content d-flex">
-                                    <div className="vendor-content" style={{ width: "500px" }}>
+                                    <div className="vendor-content" style={{ width: "800px" }}>
                                         <div className="row">
                                             <div className="col-md-12">
                                                 <div className="general-contect">
@@ -168,23 +230,34 @@ class CustomizedTreeView extends Component {
                                                             defaultEndIcon={<CloseSquare />}
                                                             sx={{ overflowY: 'auto' }}
                                                         >
-                                                            <StyledTreeItem nodeId={index + 10000} label={orgData.name} onClick={(e) => this.onClickOrg(e, orgData.id)}>
+                                                            <StyledTreeItem nodeId={index + 10000} label={orgData.name} onClick={() => this.onClickOrg('org', orgData)} selected={org === orgData}>
                                                                 {this.props?.department_list?.map((depData, depIndex) => (
                                                                     orgData.id === depData.organizationId && (
-                                                                        <StyledTreeItem nodeId={depIndex + 20000} label={depData.name} onClick={(e) => this.onClickDep(e, depData.id)}>
+                                                                        <StyledTreeItem nodeId={depIndex + 20000} label={depData.name} onClick={() => this.onClickDep('dep', depData)}
+                                                                            selected={dep === depData.id}>
                                                                             {this.props?.product_list?.map((productData, productIndex) => (
                                                                                 depData.id === productData.departmentId && (
-                                                                                    <StyledTreeItem nodeId={productIndex + 30000} label={productData.name} onClick={(e) => this.onClickProduct(e, productData.id)}>
+                                                                                    <StyledTreeItem nodeId={productIndex + 30000} label={productData.name} onClick={(e) => this.onClickProduct('product', productData)} selected={product === productData.id}>
                                                                                         {this.props?.product_env_list?.map((productEnvData, productEnvIndex) => (
                                                                                             productData.id === productEnvData.productId && (
-                                                                                                <StyledTreeItem nodeId={productEnvIndex + 40000} label={productEnvData.name} onClick={(e) => this.onClickProductEnv(e, productEnvData.id)}>
+                                                                                                <StyledTreeItem nodeId={productEnvIndex + 40000} label={productEnvData.name} onClick={(e) => this.onClickProductEnv('productEnv', productEnvData)} selected={productEnv === productEnvData.id}>
                                                                                                     {this.props?.module_list?.map((moduleData, moduleIndex) => (
                                                                                                         productEnvData.id === moduleData.productEnvId && (
-                                                                                                            <StyledTreeItem nodeId={moduleIndex + 50000} label={moduleData.name} onClick={(e) => this.onClickModule(e, moduleData.id)}>
+                                                                                                            <StyledTreeItem nodeId={moduleIndex + 50000} label={moduleData.name} onClick={(e) => this.onClickModule('module', moduleData)} selected={module === moduleData.id}>
                                                                                                                 {this.props?.business_element_list?.map((businessElementData, businessElementIndex) => (
                                                                                                                     moduleData.id === businessElementData.moduleId && (
-                                                                                                                        <StyledTreeItem nodeId={businessElementIndex + 600000} label={businessElementData.serviceName}>
-                                                                                                                        </StyledTreeItem>
+                                                                                                                        <>
+                                                                                                                            <StyledTreeItem nodeId={businessElementIndex + 600000} label={
+                                                                                                                                <div className='d-flex'>
+                                                                                                                                    {businessElementData.serviceName}
+                                                                                                                                    <ListItemIcon>
+                                                                                                                                        <MdContentCopy onClick={() => this.constructURL(businessElementData)} />
+                                                                                                                                    </ListItemIcon>
+                                                                                                                                </div>
+                                                                                                                            }  >
+                                                                                                                            </StyledTreeItem>
+
+                                                                                                                        </>
                                                                                                                     )
                                                                                                                 ))}
                                                                                                                 <StyledTreeItem />

@@ -1,6 +1,6 @@
 import { status } from '../_constants';
 import { organizationServices } from '../_services';
-import { alert, commonFunctions } from '../_utilities';
+import { alert } from '../_utilities';
 
 export const organizationAction = {
     addOrganization,

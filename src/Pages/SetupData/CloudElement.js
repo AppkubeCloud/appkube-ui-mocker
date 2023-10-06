@@ -35,7 +35,6 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-import { stringify } from 'csv-stringify/lib/sync';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -68,7 +67,10 @@ class CloudElement extends Component {
       open: false,
       costOpen: false,
       slaOpen: false,
-      scroll: 'paper',
+      openTag: false,
+      openHostedServices: false,
+      scroll: 'paper', // or whatever your default value is
+      params: null,
       organization: "",
       department: "",
       landingzone: "",
@@ -76,6 +78,7 @@ class CloudElement extends Component {
       elementType: "",
       orgList: [],
       landingZoneList: [],
+      orgId: '',
       isSubmitted: false,
       cloudElementCloumn: [
         {
@@ -98,32 +101,87 @@ class CloudElement extends Component {
         },
         {
           field: 'configJson',
-          headerName: 'Config Json',
+          headerName: 'Config',
           flex: 1,
           sortable: false,
           renderCell: (params) => (
-            <Button variant="contained" color="primary" onClick={this.handleClickOpen('paper', params)}>View</Button>
+            <Button variant="contained" color="primary" onClick={this.handleClickOpen('paper', params)}
+              disabled={params.row.configJson === null || params.row.configJson === 'null'}
+              style={{
+                color: params.row.configJson ? 'white' : 'red',
+                opacity: params.row.configJson ? 1 : 0.5,
+                cursor: params.row.configJson ? 'pointer' : 'not-allowed',
+              }}
+            >View</Button>
 
           ),
         },
         {
           field: 'costJson',
-          headerName: 'Cost Json',
+          headerName: 'Cost',
           flex: 1,
           sortable: false,
           renderCell: (params) => (
-            <Button variant="contained" color="primary" onClick={this.handleClickOpenCost('paper', params)}>View</Button>
+            <Button variant="contained" color="primary" onClick={this.handleClickOpenCost('paper', params)}
+              disabled={params.row.costJson === null || params.row.costJson === 'null'}
+              style={{
+                color: params.row.costJson ? 'white' : 'red',
+                opacity: params.row.costJson ? 1 : 0.5,
+                cursor: params.row.costJson ? 'pointer' : 'not-allowed',
+              }}
+            >View</Button>
 
           ),
         },
         {
           field: 'slaJson',
-          headerName: 'Sla Json',
+          headerName: 'Sla',
           flex: 1,
           sortable: false,
           renderCell: (params) => (
-            <Button variant="contained" color="primary" onClick={this.handleClickOpenSla('paper', params)}>View</Button>
+            <Button variant="contained" color="primary" onClick={this.handleClickOpenSla('paper', params)}
+              disabled={params.row.slaJson === null || params.row.slaJson === 'null'}
+              style={{
+                color: params.row.slaJson ? 'green' : 'red',
+                opacity: params.row.slaJson ? 1 : 0.5,
+                cursor: params.row.slaJson ? 'pointer' : 'not-allowed',
+              }}>View</Button>
 
+          ),
+        },
+        {
+          field: 'tagJson',
+          headerName: 'Tag List',
+          flex: 1,
+          sortable: false,
+          renderCell: (params) => (
+            <Button variant="contained" color="primary" onClick={this.handleClickOpenTages('paper', params)}
+              disabled={params.row.configJson === null || params.row.configJson === 'null'}
+              style={{
+                color: params.row.configJson ? 'white' : 'red',
+                opacity: params.row.configJson ? 1 : 0.5,
+                cursor: params.row.configJson ? 'pointer' : 'not-allowed'
+              }}>View</Button>
+          ),
+        },
+        {
+          field: 'hostedServices',
+          headerName: 'Hosted Services',
+          flex: 1,
+          sortable: false,
+          renderCell: (params) => (
+            <Button
+              variant="outlined"
+              onClick={this.handleClickOpenHostedServices('paper', params)}
+              disabled={params.row.hostedServices === false}
+              style={{
+                color: params.row.hostedServices ? 'green' : 'red',
+                opacity: params.row.hostedServices ? 1 : 0.5,
+                cursor: params.row.hostedServices ? 'pointer' : 'not-allowed',
+              }}
+            >
+              {params.row.hostedServices ? "true" : "false"}
+            </Button>
           ),
         },
       ],
@@ -132,6 +190,12 @@ class CloudElement extends Component {
   }
   handleClickOpen = (scrollType, params) => () => {
     this.setState({ open: true, scroll: scrollType, params: params });
+  };
+  handleClickOpenTages = (scrollType, params) => () => {
+    this.setState({ openTag: true, scroll: scrollType, params: params });
+  };
+  handleClickOpenHostedServices = (scrollType, params) => () => {
+    this.setState({ openHostedServices: true, scroll: scrollType, params: params });
   };
   handleClickOpenCost = (scrollType, params) => () => {
     this.setState({ costOpen: true, scroll: scrollType, params: params });
@@ -149,13 +213,19 @@ class CloudElement extends Component {
   handleCloseSla = () => {
     this.setState({ slaOpen: false });
   };
+  handleClosTag = () => {
+    this.setState({ openTag: false });
+  };
+  handleClickCloseHostedServices = () => {
+    this.setState({ openHostedServices: false });
+  };
 
   onCopyText = () => {
     const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.configJson, null, 2);
     navigator.clipboard.writeText(jsonString).then(() => {
       alert.success('JSON data copied to clipboard!');
     }).catch((error) => {
-      console.error('Error copying JSON data:', error);
+      alert.error('Error copying JSON data:', error);
     });
   };
 
@@ -164,7 +234,7 @@ class CloudElement extends Component {
     navigator.clipboard.writeText(jsonString).then(() => {
       alert.success('JSON data copied to clipboard!');
     }).catch((error) => {
-      console.error('Error copying JSON data:', error);
+      alert.error('Error copying JSON data:', error);
     });
   };
 
@@ -173,7 +243,24 @@ class CloudElement extends Component {
     navigator.clipboard.writeText(jsonString).then(() => {
       alert.success('JSON data copied to clipboard!');
     }).catch((error) => {
-      console.error('Error copying JSON data:', error);
+      alert.error('Error copying JSON data:', error);
+    });
+  };
+  onCopyHostedServicesText = () => {
+    const jsonString = JSON.stringify(this.state.params != null && this.state.params.row.hostedServices, null, 2);
+    navigator.clipboard.writeText(jsonString).then(() => {
+      alert.success('JSON data copied to clipboard!');
+    }).catch((error) => {
+      alert.error('Error copying JSON data:', error);
+    });
+  };
+
+  onCopyTagText = (selecteData) => {
+    const jsonString = JSON.stringify(selecteData != null && selecteData, null, 2);
+    navigator.clipboard.writeText(jsonString).then(() => {
+      alert.success('JSON data copied to clipboard!');
+    }).catch((error) => {
+      alert.error('Error copying JSON data:', error);
     });
   };
 
@@ -205,6 +292,7 @@ class CloudElement extends Component {
     const { name, value } = e.target;
     this.setState({
       [name]: value,
+      orgId: value
     });
     this.props.dispatch(departmentAction.getDepartment({ organizationId: value }))
   };
@@ -251,6 +339,30 @@ class CloudElement extends Component {
     return retData;
   };
 
+  validateAutoAssociate = (isSubmitted) => {
+    const validObj = {
+      isValid: true,
+      message: "",
+    };
+    let isValid = true;
+    const retData = {
+      organization: validObj,
+      isValid,
+    };
+    if (isSubmitted) {
+      const { organization } = this.state;
+      if (!organization) {
+        retData.organization = {
+          isValid: false,
+          message: alert.error(constantErr.ORGANIZATION)
+        };
+        isValid = false;
+      }
+    }
+    retData.isValid = isValid;
+    return retData;
+  };
+
 
   getCloudElement = async (event) => {
     const { region, personName, landingzone } = this.state;
@@ -267,6 +379,22 @@ class CloudElement extends Component {
       };
       this.props.dispatch(cloudElementAction.getCloudElement({ newPenv }))
     }
+  }
+  getAutoSssociate = async (e) => {
+    const { orgId } = this.state;
+    e.preventDefault();
+    this.setState({
+      isSubmitted: true
+    });
+    const newErrorData = this.validateAutoAssociate(true);
+    if (newErrorData.isValid) {
+      var newAutoSssociate = {
+        "orgId": orgId,
+        "cloud": "aws"
+      };
+      this.props.dispatch(cloudElementAction.getAutoSssociate({ newAutoSssociate }))
+    }
+
   }
 
   componentDidMount = () => {
@@ -334,7 +462,7 @@ class CloudElement extends Component {
   exportToCSV = () => {
     if (this.props.cloud_element_list && this.props.cloud_element_list.length > 0) {
       const fileName = 'data.csv';
-      const csvData = stringify(this.props.cloud_element_list != null && this.props.cloud_element_list, { header: true });
+      const csvData = JSON.stringify(this.props.cloud_element_list != null && this.props.cloud_element_list, { header: true });
 
       const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
       saveAs(blob, fileName);
@@ -349,7 +477,7 @@ class CloudElement extends Component {
     this.setState({ cloudElementCloumn: newColumns });
   };
   render() {
-    const { orgList, cloudElementCloumn, open, costOpen, scroll, personName, slaOpen } = this.state;
+    const { orgList, cloudElementCloumn, open, costOpen, scroll, personName, slaOpen, openTag, openHostedServices } = this.state;
 
     return (
       <>
@@ -462,8 +590,14 @@ class CloudElement extends Component {
                                 </div>
                                 <Container className="mt-4" >
                                   <Tooltip title="Save">
-                                    <Button type="submit" className="ml-0" variant="contained" color="primary" onClick={this.getCloudElement}>
+                                    <Button type="submit" className="mr-3" variant="contained" color="primary" onClick={this.getCloudElement}>
                                       <SaveAsIcon className="mr-2" /> Save
+                                    </Button>
+                                  </Tooltip>
+
+                                  <Tooltip title="Auto Associate">
+                                    <Button type="submit" className="ml-0" variant="contained" color="primary" onClick={this.getAutoSssociate}>
+                                      <SaveAsIcon className="mr-2" /> Auto Associate
                                     </Button>
                                   </Tooltip>
                                 </Container>
@@ -600,6 +734,88 @@ class CloudElement extends Component {
             <DialogActions>
               <Button onClick={this.handleCloseSla}>Cancel</Button>
 
+            </DialogActions>
+          </Dialog>
+        </div>
+
+
+        <div>
+          <Dialog
+            open={openTag}
+            onClose={this.handleClosTag}
+            scroll={scroll}
+            aria-labelledby="scroll-dialog-title"
+            aria-describedby="scroll-dialog-description"
+          >
+            <div className="d-flex" style={{ flexDirection: "row" }}>
+              <DialogTitle id="scroll-dialog-title">Tag Json</DialogTitle>
+              <Button onClick={() => {
+                if (this.state.params != null) {
+                  if (this.state.params.row.elementType === "RDS") {
+                    this.onCopyTagText(this.state.params.row.configJson.TagList);
+                  } else if (this.state.params.row.elementType === "KINESYS") {
+                    this.onCopyTagText(this.state.params.row.configJson.tags.Tags);
+                  }
+                  else if (this.state.params.row.elementType === "ECS") {
+                    this.onCopyTagText(this.state.params.row.configJson.Tags);
+                  }
+                  else if (this.state.params.row.elementType === "EKS") {
+                    this.onCopyTagText(this.state.params.row.configJson.Cluster.Tags);
+                  }
+                  else if (this.state.params.row.elementType === "CDN") {
+                    this.onCopyTagText(this.state.params.row.configJson.tags.Tags.Items);
+                  }
+                  else if (this.state.params.row.elementType === "DYNAMODB") {
+                    this.onCopyTagText(this.state.params.row.configJson.tags.Tags);
+                  }
+                }
+              }}> <MdContentCopy />Copy</Button>
+            </div>
+            <DialogContent dividers={scroll === 'paper'}>
+              <DialogContentText
+                id="scroll-dialog-description"
+                ref={this.descriptionElementRef}
+                tabIndex={-1}
+              >
+                {this.state.params != null && this.state.params.row.elementType === "RDS" && this.state.params.row.configJson.TagList != null && <pre>{JSON.stringify(this.state.params.row.configJson.TagList, null, 2)}</pre>}
+                {this.state.params != null && this.state.params.row.elementType === "KINESYS" && this.state.params.row.configJson.tags.Tags != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags.Tags, null, 2)}</pre>}
+                {this.state.params != null && this.state.params.row.elementType === "ECS" && this.state.params.row.configJson.Tags != null && <pre>{JSON.stringify(this.state.params.row.configJson.Tags, null, 2)}</pre>}
+                {this.state.params != null && this.state.params.row.elementType === "EKS" && this.state.params.row.configJson.Cluster.Tags != null && <pre>{JSON.stringify(this.state.params.row.configJson.Cluster.Tags, null, 2)}</pre>}
+                {this.state.params != null && this.state.params.row.elementType === "CDN" && this.state.params.row.configJson.tags.Tags.Items != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags.Tags.Items, null, 2)}</pre>}
+                {this.state.params != null && this.state.params.row.elementType === "DYNAMODB" && this.state.params.row.configJson.tags.Tags != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags.Tags, null, 2)}</pre>}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClosTag}>Cancel</Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+
+        <div>
+          <Dialog
+            open={openHostedServices}
+            onClose={this.handleClickCloseHostedServices}
+            scroll={scroll}
+            aria-labelledby="scroll-dialog-title"
+            aria-describedby="scroll-dialog-description"
+          >
+            <div className="d-flex" style={{ flexDirection: "row" }}>
+              <DialogTitle id="scroll-dialog-title">Hosted Services</DialogTitle>
+              <Button onClick={this.onCopyHostedServicesText}> <MdContentCopy />Copy</Button>
+            </div>
+            <DialogContent dividers={scroll === 'paper'}>
+              <DialogContentText
+                id="scroll-dialog-description"
+                ref={this.descriptionElementRef}
+                tabIndex={-1}
+              >
+                {
+                  <pre>{JSON.stringify(this.state.params != null && this.state.params.row.hostedServices, null, 2)}</pre>
+                }
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClickCloseHostedServices}>Cancel</Button>
             </DialogActions>
           </Dialog>
         </div>

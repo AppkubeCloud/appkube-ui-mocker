@@ -5,7 +5,8 @@ import { alert, commonFunctions } from '../_utilities';
 export const cloudElementAction = {
     addCloudElement,
     getCloudElement,
-    getAllCloudElement
+    getAllCloudElement,
+    getAutoSssociate,
 };
 
 function addCloudElement(data) {
@@ -66,6 +67,52 @@ function getCloudElement(data) {
         }));
 
         cloudElementServices.getCloudElement(data)
+            .then(
+                response => {
+                    if (response) {
+                        dispatch(dispatchFunction({
+                            type: status.SUCCESS,
+                            data: {
+                               cloud_element_status: status.SUCCESS,
+                               cloud_element_list: response
+                            }
+                        }));
+                    } else {
+                        dispatch(dispatchFunction({
+                            type: status.FAILURE,
+                            data: {
+                               cloud_element_status: status.FAILURE,
+                               cloud_element_list: response
+                            }
+                        }));
+                        alert.error(response);
+                    }
+                },
+                error => {
+                    dispatch(dispatchFunction({
+                        type: status.FAILURE,
+                        data: {
+                           cloud_element_status: status.FAILURE,
+                           cloud_element_list: error
+                        }
+                    }));
+                    alert.error(error);
+                }
+            );
+    };
+}
+
+function getAutoSssociate(data) {
+    return dispatch => {
+        dispatch(dispatchFunction({
+            type: status.IN_PROGRESS,
+            data: {
+                cloud_element_status: status.IN_PROGRESS,
+                cloud_element_list: null
+            }
+        }));
+
+        cloudElementServices.getAutoSssociate(data)
             .then(
                 response => {
                     if (response) {

@@ -4,6 +4,7 @@ import { apiEndPoint } from "./apiEndPoint";
 export const cloudElementServices = {
   addCloudElement,
   getCloudElement,
+  getAutoSssociate,
   getAllCloudElement
 }
 
@@ -16,32 +17,13 @@ function addCloudElement(data) {
 }
 
 
-// function getCloudElement(data) {
-//   const extraHeaders = {
-//     "Content-Type": "application/json"
-//   };
-//   let url = "";
-//   if (data.newPenv) {
-//     if (data.newPenv.organizationId) {
-//       url += `${url ? '&' : '?'}organizationId=${data.newPenv.organizationId}`;
-//     }
-//     if (data.newPenv.departmentId) {
-//       url += `${url ? '&' : '?'}departmentId=${data.newPenv.departmentId}`;
-//     }
-//     if (data.newPenv.landingZone) {
-//       url += `${url ? '&' : '?'}landingZone=${data.newPenv.landingZone}`;
-//     }
-//     if (data.newPenv.elementType) {
-//       url += `${url ? '&' : '?'}elementType=${data.newPenv.elementType}`;
-//     }
-//     if (data.newPenv.awsRegion) {
-//       url += `${url ? '&' : '?'}awsRegion=${data.newPenv.awsRegion}`;
-//     }
-//   }
-//   console.log("personName",data)
-//   const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
-//   return fetch(`${apiEndPoint.PRODUCT_ENV_SEARCH}${url}`, requestOptions).then(response => response.json());
-// }
+function getAutoSssociate(data) {
+  const extraHeaders = {
+    "Content-Type": "application/json"
+  };
+  const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
+  return fetch(`${apiEndPoint.GET_AUTO_SSOCIATE}/${data.newAutoSssociate.orgId}/cloud/${data.newAutoSssociate.cloud}`, requestOptions).then(response => response.json());
+}
 
 function getCloudElement(data) {
   const extraHeaders = {

@@ -29,7 +29,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-import { stringify } from 'csv-stringify/lib/sync';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 class ConfigSummaryDiscovery extends Component {
     constructor(props) {
@@ -238,7 +237,7 @@ class ConfigSummaryDiscovery extends Component {
     exportToCSV = () => {
         if (this.props.config_summary_discovery_list && this.props.config_summary_discovery_list.length > 0) {
             const fileName = 'config_summary_discovery.csv';
-            const csvData = stringify(this.props.config_summary_discovery_list != null && this.props.config_summary_discovery_list, { header: true });
+            const csvData = JSON.stringify(this.props.config_summary_discovery_list != null && this.props.config_summary_discovery_list, { header: true });
 
             const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
             saveAs(blob, fileName);

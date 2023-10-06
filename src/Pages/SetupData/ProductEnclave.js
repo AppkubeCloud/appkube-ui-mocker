@@ -35,7 +35,6 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-import { stringify } from 'csv-stringify/lib/sync';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 class ProductEnclave extends Component {
     constructor(props) {
@@ -244,7 +243,7 @@ class ProductEnclave extends Component {
     exportToCSV = () => {
         if (this.props.product_enclave_list && this.props.product_enclave_list.length > 0) {
             const fileName = 'product_enclave.csv';
-            const csvData = stringify(this.props.product_enclave_list != null && this.props.product_enclave_list, { header: true });
+            const csvData = JSON.stringify(this.props.product_enclave_list != null && this.props.product_enclave_list, { header: true });
 
             const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
             saveAs(blob, fileName);

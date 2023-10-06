@@ -22,7 +22,6 @@ import { DataGrid , GridToolbar} from '@mui/x-data-grid';
 import '../../Table/table.css'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-import { stringify } from 'csv-stringify/lib/sync';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 class Landingzone extends Component {
@@ -221,7 +220,7 @@ class Landingzone extends Component {
     exportToCSV = () => {
         if (this.props.landingzone_list && this.props.landingzone_list.length > 0) {
             const fileName = 'landingzone.csv';
-            const csvData = stringify(this.props.landingzone_list != null && this.props.landingzone_list, { header: true });
+            const csvData = JSON.stringify(this.props.landingzone_list != null && this.props.landingzone_list, { header: true });
 
             const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
             saveAs(blob, fileName);

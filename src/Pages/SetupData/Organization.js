@@ -19,8 +19,8 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import '../../Table/table.css'
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-import { stringify } from 'csv-stringify/lib/sync';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
 
 
 class Organization extends Component {
@@ -85,8 +85,8 @@ class Organization extends Component {
     }
 
   }
-  componentDidMount = () => {
-    this.props.dispatch(organizationAction.getOrganization({}))
+  componentDidMount = async() => {
+     this.props.dispatch(organizationAction.getOrganization({}))
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -120,7 +120,7 @@ class Organization extends Component {
   exportToCSV = () => {
     if (this.props.organization_list && this.props.organization_list.length > 0) {
       const fileName = 'organization.csv';
-      const csvData = stringify(this.props.organization_list != null && this.props.organization_list, { header: true });
+      const csvData = JSON.stringify(this.props.organization_list != null && this.props.organization_list, { header: true });
 
       const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
       saveAs(blob, fileName);

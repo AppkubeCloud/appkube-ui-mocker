@@ -29,4 +29,5 @@ export const apiEndPoint = {
   CONFIG_SUMMERY_DISCOVERY: `${config.apiUrl}/cloud-element-summary`,
   COST_DATA_GENERATOR: `${config.apiUrl}/cloud-element/generate/cost-data`,
   SLA_DATA_GENERATOR: `${config.apiUrl}/cloud-element/generate/sla-data`,
+  GET_AUTO_SSOCIATE:`${config.apiUrl}/cloud-element/auto-associate/org`,
 }
