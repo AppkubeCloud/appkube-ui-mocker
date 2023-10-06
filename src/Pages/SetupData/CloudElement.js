@@ -120,7 +120,7 @@ class CloudElement extends Component {
           field: 'costJson',
           headerName: 'Cost',
           flex: 1,
-          sortable: false,
+          sortable: true,
           renderCell: (params) => (
             <Button variant="contained" color="primary" onClick={this.handleClickOpenCost('paper', params)}
               disabled={params.row.costJson === null || params.row.costJson === 'null'}
@@ -129,7 +129,7 @@ class CloudElement extends Component {
                 opacity: params.row.costJson ? 1 : 0.5,
                 cursor: params.row.costJson ? 'pointer' : 'not-allowed',
               }}
-            >View</Button>
+            >{params.row.costJson ? "VIEW" : "No Data"}</Button>
 
           ),
         },
@@ -145,7 +145,7 @@ class CloudElement extends Component {
                 color: params.row.slaJson ? 'green' : 'red',
                 opacity: params.row.slaJson ? 1 : 0.5,
                 cursor: params.row.slaJson ? 'pointer' : 'not-allowed',
-              }}>View</Button>
+              }}>{params.row.slaJson ? "VIEW" : "No Data"}</Button>
 
           ),
         },
@@ -161,7 +161,7 @@ class CloudElement extends Component {
                 color: params.row.configJson ? 'white' : 'red',
                 opacity: params.row.configJson ? 1 : 0.5,
                 cursor: params.row.configJson ? 'pointer' : 'not-allowed'
-              }}>View</Button>
+              }}>{params.row.configJson ? "VIEW" : "No Data"}</Button>
           ),
         },
         {
@@ -790,6 +790,9 @@ class CloudElement extends Component {
                   else if (this.state.params.row.elementType === "DYNAMODB") {
                     this.onCopyTagText(this.state.params.row.configJson.tags.Tags);
                   }
+                  else if (this.state.params.row.elementType === "LAMBDA") {
+                    this.onCopyTagText(this.state.params.row.configJson.tags);
+                  }
                 }
               }}> <MdContentCopy />Copy</Button>
             </div>
@@ -805,6 +808,7 @@ class CloudElement extends Component {
                 {this.state.params != null && this.state.params.row.elementType === "EKS" && this.state.params.row.configJson.Cluster.Tags != null && <pre>{JSON.stringify(this.state.params.row.configJson.Cluster.Tags, null, 2)}</pre>}
                 {this.state.params != null && this.state.params.row.elementType === "CDN" && this.state.params.row.configJson.tags.Tags.Items != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags.Tags.Items, null, 2)}</pre>}
                 {this.state.params != null && this.state.params.row.elementType === "DYNAMODB" && this.state.params.row.configJson.tags.Tags != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags.Tags, null, 2)}</pre>}
+                {this.state.params != null && this.state.params.row.elementType === "LAMBDA" && this.state.params.row.configJson.tags != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags, null, 2)}</pre>}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
