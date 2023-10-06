@@ -56,12 +56,18 @@ class ConfigSummaryDiscovery extends Component {
                     field: 'landingZone', headerName: 'Landing Zone', flex: 1,
                 },
                 {
-                    field: '',
+                    field: 'summaryJson',
                     headerName: 'Summary Json',
                     flex: 1,
                     sortable: false,
                     renderCell: (params) => (
-                        <Button variant="contained" color="primary" onClick={this.handleClickOpen('paper', params)}>View</Button>
+                        <Button variant="contained" color="primary" onClick={this.handleClickOpen('paper', params)}
+                        disabled={params.row.summaryJson === false}
+                        style={{
+                          color: params.row.summaryJson ? 'white' : 'red',
+                          opacity: params.row.summaryJson ? 1 : 0.5,
+                          cursor: params.row.summaryJson ? 'pointer' : 'not-allowed',
+                        }}>View</Button>
 
                     ),
                 },

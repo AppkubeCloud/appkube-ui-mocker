@@ -68,12 +68,18 @@ class ProductEnclave extends Component {
                     field: 'instanceId', headerName: 'Instance Id', flex: 1,
                 },
                 {
-                    field: '',
+                    field: 'metaData',
                     headerName: 'Meta Data',
                     flex: 1,
                     sortable: false,
                     renderCell: (params) => (
-                        <Button variant="contained" color="primary" onClick={this.handleClickOpen('paper', params)}>View</Button>
+                        <Button variant="contained" color="primary" onClick={this.handleClickOpen('paper', params)}
+                        disabled={params.row.metadata === false}
+                        style={{
+                          color: params.row.metadata ? 'white' : 'red',
+                          opacity: params.row.metadata ? 1 : 0.5,
+                          cursor: params.row.metadata ? 'pointer' : 'not-allowed',
+                        }}>View</Button>
 
                     ),
                 },
