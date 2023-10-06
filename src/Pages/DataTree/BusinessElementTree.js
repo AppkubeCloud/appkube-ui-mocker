@@ -11,6 +11,7 @@ import { status } from '../../_constants';
 import { MdContentCopy } from "react-icons/md";
 import { ListItemIcon } from '@mui/material';
 import { alert } from '../../_utilities';
+import { Button } from 'react-bootstrap';
 
 
 class MinusSquare extends Component {
@@ -195,13 +196,22 @@ class CustomizedTreeView extends Component {
 
     constructURL = (businessElement) => {
         const { selectedValues } = this.state;
-        console.log(selectedValues, businessElement)
-        let url = `${selectedValues.org.name}/${selectedValues.dep.name}/${selectedValues.product.name}/${selectedValues.productEnv.name}/${businessElement.serviceNature}/${selectedValues.module.name}/${businessElement.serviceName}`
-        const jsonString = JSON.stringify(url, null, 2).replace(/"/g, '');;
+        console.log(selectedValues, businessElement);
+    
+        let url = "";
+    
+        if (selectedValues.product.type === "SOA") {
+            url = `${selectedValues.org.name}/${selectedValues.dep.name}/${selectedValues.product.name}/${selectedValues.productEnv.name}/${businessElement.serviceNature}/${selectedValues.module.name}/${businessElement.serviceName}`;
+        } else if(selectedValues.product.type === "3 Tier") {
+            url = `${selectedValues.org.name}/${selectedValues.dep.name}/${selectedValues.product.name}/${selectedValues.productEnv.name}/${businessElement.serviceType+" "+"Layer"}/${businessElement.serviceName}`;
+        }
+    
+        const jsonString = JSON.stringify(url, null, 2).replace(/"/g, '');
+    
         navigator.clipboard.writeText(jsonString).then(() => {
-            alert.success('Url copied to clipboard!');
+            alert.success('URL copied to clipboard!');
         }).catch((error) => {
-            alert.error('Error copying url data:', error);
+            alert.error('Error copying URL data:', error);
         });
     };
 
@@ -233,7 +243,10 @@ class CustomizedTreeView extends Component {
                                                             <StyledTreeItem nodeId={index + 10000} label={orgData.name} onClick={() => this.onClickOrg('org', orgData)} selected={org === orgData}>
                                                                 {this.props?.department_list?.map((depData, depIndex) => (
                                                                     orgData.id === depData.organizationId && (
-                                                                        <StyledTreeItem nodeId={depIndex + 20000} label={depData.name} onClick={() => this.onClickDep('dep', depData)}
+                                                                        <StyledTreeItem nodeId={depIndex + 20000} label={<div className='d-flex'>
+                                                                            {depData.name}
+                                                                           
+                                                                        </div>} onClick={() => this.onClickDep('dep', depData)}
                                                                             selected={dep === depData.id}>
                                                                             {this.props?.product_list?.map((productData, productIndex) => (
                                                                                 depData.id === productData.departmentId && (
