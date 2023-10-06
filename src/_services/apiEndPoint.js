@@ -30,4 +30,6 @@ export const apiEndPoint = {
   COST_DATA_GENERATOR: `${config.apiUrl}/cloud-element/generate/cost-data`,
   SLA_DATA_GENERATOR: `${config.apiUrl}/cloud-element/generate/sla-data`,
   GET_AUTO_SSOCIATE:`${config.apiUrl}/cloud-element/auto-associate/org`,
+  GET_AUTO_SSOCIATE_LAMBDA:`${config.apiUrl}/cloud-element/auto-associate-lambda`,
+  GET_AUTO_SSOCIATE_S3:`${config.apiUrl}/cloud-element/auto-associate-s3`,
 }

@@ -397,6 +397,17 @@ class CloudElement extends Component {
 
   }
 
+  getAutoSssociateLambda = async (e) => {
+    e.preventDefault();
+    this.props.dispatch(cloudElementAction.getAutoSssociateLambda({}))
+
+  }
+  getAutoSssociateS3 = async (e) => {
+    e.preventDefault();
+    this.props.dispatch(cloudElementAction.getAutoSssociateS3({}))
+
+  }
+
   componentDidMount = () => {
     this.props.dispatch(organizationAction.getOrganization({}))
     if (this.state.open) {
@@ -596,8 +607,18 @@ class CloudElement extends Component {
                                   </Tooltip>
 
                                   <Tooltip title="Auto Associate">
-                                    <Button type="submit" className="ml-0" variant="contained" color="primary" onClick={this.getAutoSssociate}>
+                                    <Button type="submit" className="mr-3" variant="contained" color="primary" onClick={this.getAutoSssociate}>
                                       <SaveAsIcon className="mr-2" /> Auto Associate
+                                    </Button>
+                                  </Tooltip>
+                                  <Tooltip title="Auto Associate">
+                                    <Button type="submit" className="mr-3" variant="contained" color="primary" onClick={this.getAutoSssociateLambda}>
+                                      <SaveAsIcon className="mr-2" /> Auto Associate Lambda
+                                    </Button>
+                                  </Tooltip>
+                                  <Tooltip title="Auto Associate">
+                                    <Button type="submit" className="mr-3" variant="contained" color="primary" onClick={this.getAutoSssociateS3}>
+                                      <SaveAsIcon className="mr-2" /> Auto Associate S3
                                     </Button>
                                   </Tooltip>
                                 </Container>
@@ -625,6 +646,7 @@ class CloudElement extends Component {
                 <Button variant="contained" className="btnData ml-4" style={{ backgroundColor: "#16619F", color: "white", borderRadius: "30px" }} onClick={this.exportToCSV}>
                   <ArrowDownwardIcon className="mr-2" />Export to CSV
                 </Button>
+
 
               </div>
               <div className="mt-3" style={{ height: 400, width: '100%' }}>

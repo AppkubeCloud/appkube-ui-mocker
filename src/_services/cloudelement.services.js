@@ -5,17 +5,31 @@ export const cloudElementServices = {
   addCloudElement,
   getCloudElement,
   getAutoSssociate,
-  getAllCloudElement
+  getAllCloudElement,
+  getAutoSssociateLambda,
+  getAutoSssociateS3
 }
 
 function addCloudElement(data) {
-  //   const extraHeaders = {
-  //     "Content-Type": "application/json"
-  // };
-  //   const requestOptions = commonFunctions.getRequestOptions("POST", extraHeaders, JSON.stringify(data));
-  //   return fetch(`${apiEndPoint.ORGANIZARION}`, requestOptions).then(response => response);
+  
 }
 
+
+function getAutoSssociateLambda() {
+  const extraHeaders = {
+    "Content-Type": "application/json"
+  };
+  const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
+  return fetch(`${apiEndPoint.GET_AUTO_SSOCIATE_LAMBDA}`, requestOptions).then(response => response.json());
+}
+
+function getAutoSssociateS3() {
+  const extraHeaders = {
+    "Content-Type": "application/json"
+  };
+  const requestOptions = commonFunctions.getRequestOptions("GET", extraHeaders, null);
+  return fetch(`${apiEndPoint.GET_AUTO_SSOCIATE_S3}`, requestOptions).then(response => response.json());
+}
 
 function getAutoSssociate(data) {
   const extraHeaders = {

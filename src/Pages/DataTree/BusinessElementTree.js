@@ -197,17 +197,17 @@ class CustomizedTreeView extends Component {
     constructURL = (businessElement) => {
         const { selectedValues } = this.state;
         console.log(selectedValues, businessElement);
-    
+
         let url = "";
-    
+
         if (selectedValues.product.type === "SOA") {
             url = `${selectedValues.org.name}/${selectedValues.dep.name}/${selectedValues.product.name}/${selectedValues.productEnv.name}/${businessElement.serviceNature}/${selectedValues.module.name}/${businessElement.serviceName}`;
-        } else if(selectedValues.product.type === "3 Tier") {
-            url = `${selectedValues.org.name}/${selectedValues.dep.name}/${selectedValues.product.name}/${selectedValues.productEnv.name}/${businessElement.serviceType+" "+"Layer"}/${businessElement.serviceName}`;
+        } else if (selectedValues.product.type === "3 Tier") {
+            url = `${selectedValues.org.name}/${selectedValues.dep.name}/${selectedValues.product.name}/${selectedValues.productEnv.name}/${businessElement.serviceType + " " + "Layer"}/${businessElement.serviceName}`;
         }
-    
+
         const jsonString = JSON.stringify(url, null, 2).replace(/"/g, '');
-    
+
         navigator.clipboard.writeText(jsonString).then(() => {
             alert.success('URL copied to clipboard!');
         }).catch((error) => {
@@ -245,7 +245,7 @@ class CustomizedTreeView extends Component {
                                                                     orgData.id === depData.organizationId && (
                                                                         <StyledTreeItem nodeId={depIndex + 20000} label={<div className='d-flex'>
                                                                             {depData.name}
-                                                                           
+
                                                                         </div>} onClick={() => this.onClickDep('dep', depData)}
                                                                             selected={dep === depData.id}>
                                                                             {this.props?.product_list?.map((productData, productIndex) => (

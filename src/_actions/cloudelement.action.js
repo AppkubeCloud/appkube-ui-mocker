@@ -7,6 +7,8 @@ export const cloudElementAction = {
     getCloudElement,
     getAllCloudElement,
     getAutoSssociate,
+    getAutoSssociateLambda,
+    getAutoSssociateS3
 };
 
 function addCloudElement(data) {
@@ -113,6 +115,100 @@ function getAutoSssociate(data) {
         }));
 
         cloudElementServices.getAutoSssociate(data)
+            .then(
+                response => {
+                    if (response) {
+                        dispatch(dispatchFunction({
+                            type: status.SUCCESS,
+                            data: {
+                               cloud_element_status: status.SUCCESS,
+                               cloud_element_list: response
+                            }
+                        }));
+                    } else {
+                        dispatch(dispatchFunction({
+                            type: status.FAILURE,
+                            data: {
+                               cloud_element_status: status.FAILURE,
+                               cloud_element_list: response
+                            }
+                        }));
+                        alert.error(response);
+                    }
+                },
+                error => {
+                    dispatch(dispatchFunction({
+                        type: status.FAILURE,
+                        data: {
+                           cloud_element_status: status.FAILURE,
+                           cloud_element_list: error
+                        }
+                    }));
+                    alert.error(error);
+                }
+            );
+    };
+}
+
+function getAutoSssociateLambda(data) {
+    return dispatch => {
+        dispatch(dispatchFunction({
+            type: status.IN_PROGRESS,
+            data: {
+                cloud_element_status: status.IN_PROGRESS,
+                cloud_element_list: null
+            }
+        }));
+
+        cloudElementServices.getAutoSssociateLambda(data)
+            .then(
+                response => {
+                    if (response) {
+                        dispatch(dispatchFunction({
+                            type: status.SUCCESS,
+                            data: {
+                               cloud_element_status: status.SUCCESS,
+                               cloud_element_list: response
+                            }
+                        }));
+                    } else {
+                        dispatch(dispatchFunction({
+                            type: status.FAILURE,
+                            data: {
+                               cloud_element_status: status.FAILURE,
+                               cloud_element_list: response
+                            }
+                        }));
+                        alert.error(response);
+                    }
+                },
+                error => {
+                    dispatch(dispatchFunction({
+                        type: status.FAILURE,
+                        data: {
+                           cloud_element_status: status.FAILURE,
+                           cloud_element_list: error
+                        }
+                    }));
+                    alert.error(error);
+                }
+            );
+    };
+}
+
+
+
+function getAutoSssociateS3(data) {
+    return dispatch => {
+        dispatch(dispatchFunction({
+            type: status.IN_PROGRESS,
+            data: {
+                cloud_element_status: status.IN_PROGRESS,
+                cloud_element_list: null
+            }
+        }));
+
+        cloudElementServices.getAutoSssociateS3(data)
             .then(
                 response => {
                     if (response) {
