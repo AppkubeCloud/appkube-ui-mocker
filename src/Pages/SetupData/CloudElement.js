@@ -173,11 +173,11 @@ class CloudElement extends Component {
             <Button
               variant="outlined"
               onClick={this.handleClickOpenHostedServices('paper', params)}
-              disabled={params.row.hostedServices === false}
+              disabled={params.row.hostedServices === null || params.row.hostedServices === 'null'}
               style={{
                 color: params.row.hostedServices ? 'green' : 'red',
                 opacity: params.row.hostedServices ? 1 : 0.5,
-                cursor: params.row.hostedServices ? 'pointer' : 'not-allowed',
+                cursor: params.row.hostedServices ? 'pointer' : 'not-allowed'
               }}
             >
               {params.row.hostedServices ? "true" : "false"}
