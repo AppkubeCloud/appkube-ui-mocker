@@ -812,7 +812,7 @@ class CloudElement extends Component {
                 {this.state.params != null && this.state.params.row.elementType === "CDN" && this.state.params.row.configJson.tags.Tags.Items != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags.Tags.Items, null, 2)}</pre>}
                 {this.state.params != null && this.state.params.row.elementType === "DYNAMODB" && this.state.params.row.configJson.tags.Tags != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags.Tags, null, 2)}</pre>}
                 {this.state.params != null && this.state.params.row.elementType === "LAMBDA" && this.state.params.row.configJson.tags != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags, null, 2)}</pre>}
-                {this.state.params != null && this.state.params.row.elementType === "S3" && this.state.params.row.configJson.tags.TagSet != null && <pre>{JSON.stringify(this.state.params.row.configJson.tags.TagSet, null, 2)}</pre>}
+                {this.state.params != null && this.state.params.row.elementType === "S3" && this.state.params.row.configJson?.tags?.TagSet != null && <pre>{JSON.stringify(this.state.params.row.configJson?.tags?.TagSet, null, 2)}</pre>}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
