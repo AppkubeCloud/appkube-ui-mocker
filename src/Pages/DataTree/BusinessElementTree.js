@@ -224,7 +224,7 @@ class CustomizedTreeView extends Component {
                 <div className='form-container'>
                     <div className='d-flex' style={{ flexDirection: "column" }}>
                         {
-                            this.props?.organization_list?.map((orgData, index) => (
+                            Array.isArray(this.props?.organization_list) &&this.props?.organization_list?.map((orgData, index) => (
 
                                 <div className="main-content d-flex">
                                     <div className="vendor-content" style={{ width: "800px" }}>
